@@ -44,6 +44,8 @@
 
   
 <script>
+  
+  /* OPEN JAVASCRIPT CONSOLE TO SEE LOGIC NOTES IN REALTIME    */
 
 var select = document.getElementById('sel');
 var opt;
@@ -53,7 +55,7 @@ var config={};
 var min_pie_val=0.02;
 var updatefooter="";
   
-  var color_transfer= "#961a1a" // "#961a1a" ;
+  var color_transfer= "#961a1a" ;
   var color_agr="#be66a2"   ;
     var color_ag_prod="#985282"   ;
     var color_ag_inp="#AB5C92"   ;
@@ -65,8 +67,8 @@ var updatefooter="";
     var color_tour_resort="#BA671E"   ;
     var color_tour_home="#D27421"   ;
   var color_commute="#a05d56"   ;
-  var color_oth_hh="#546e91"  //"#5b388f"  ;
-  var color_retiree="#5b388f"  // "#546e91";
+  var color_oth_hh="#546e91"  ;
+  var color_retiree="#5b388f"  ;
   var color_other="#7d9058"   ;
   
   
@@ -78,6 +80,7 @@ var updatefooter="";
     opt.innerHTML = data[i].Name;
     select.appendChild(opt);
     
+    //defaults to Otero
     if(data[i].FIPS == 89) {
         select.selectedIndex = i;
     }
@@ -86,7 +89,7 @@ var updatefooter="";
   
   
 
-  
+  //pie properties (ALL!) most are left as defaults
 config={
 	header: {
 		title: {
@@ -179,7 +182,7 @@ config={
 	tooltips: {
 		enabled: false,
 		type: "placeholder", // caption|placeholder
-		string: "",
+		string: "3423423",
 		placeholderParser: null,
 		styles: {
 			fadeInSpeed: 250,
@@ -235,23 +238,23 @@ config={
 	}
 };
 
+  
+  //a bit of a hack.  title and footer are changed after the chart is reloaded.  problems with updatepie method on svg text in IE and Safari.  Issue filed.
   function changetitle(){
-        
-        
+       
         document.getElementById('p0_footer').setAttribute("x", "10");
         document.getElementById('p0_footer').setAttribute("fill", "#666666"  ); 
-    
-    
-              //reload chart outline
+
+              //add chart outline after reload
   d3.select('svg').append("rect")
-    .attr("width",800) //+lbuffer+rbuffer
-    .attr("height",600) //+bottomspace+topspace      
+    .attr("width",800) 
+    .attr("height",600)     
     .style({'fill':'white','fill-opacity':'0','stroke-width': 1,'stroke':'dimgrey'});
     
 
   }  
   
-  
+  //called by onchange event on select dropdown.  'redraw' parameter only refused (by setting to 'no') on initial load .
   function changedata(fips, redraw){
 
 
@@ -554,10 +557,10 @@ config={
       
       if(redraw==='yes'){
         
-        //regular
+        //regular method - works fine on data
         pie.updateProp("data.content", config.data.content);
 
-        //safari
+        //workaround for SVG text elements.  change property in config object.  but wait til chart is loaded to update actual SVG.
         var titletext = document.getElementById('p0_title');
         titletext.textContent=config.header.title.text;
         var footertext = document.getElementById('p0_footer');
@@ -575,7 +578,7 @@ config={
     
   }
     
-  //go time
+  //go time:  kicks off app by loading OTERO
   changedata(89, 'no');
   pie = new d3pie("pie", config); 
 
