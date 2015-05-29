@@ -4,11 +4,15 @@
 <head>
 	<title>Base Industry Pie Creator</title>
   
+
   
 <style>
+  
+
   #pie{
     position: absolute;
-    left: 300px;
+    left: 20px;
+    top: 50px;
   }
 
   rect{
@@ -18,9 +22,15 @@
   #selectordiv{
     position: absolute;
     left: 20px;
-    top: 100px;
-    
+    top: 0px;
   }
+  
+  #exportdiv{
+    position: absolute;
+    left: 300px;
+    top: 0px;
+  }
+  
 </style>  
   
   
@@ -30,10 +40,10 @@
 <div id="pie"></div>
   
   <div id="selectordiv">
-    <label for="sel">Choose an Area:</label><br/><br />
     <select id="sel" onchange="changedata(this.value,'yes');">
     </select>  <br /><br /><br />
-    
+  </div>
+  <div id="exportdiv">
     <button type="button" id="t_download" class="btn" onclick="saveSvgAsPng(document.getElementsByTagName('svg')[0], 'diagram.png');" tabindex="8" accesskey="i">Download PNG</button>
   </div>
   
