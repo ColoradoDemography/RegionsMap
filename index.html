@@ -53,21 +53,21 @@ var config={};
 var min_pie_val=0.02;
 var updatefooter="";
   
-  var color_transfer="#961a1a"   ;//"#2484c1";
-  var color_agr="#be66a2"   ;//"#65a620";
-    var color_ag_prod="#985282"   ;//"#65a620";
-    var color_ag_inp="#AB5C92"   ;//"#65a620";
-  var color_manu="#7b6888"   ;//"#7b6888";
-  var color_mining="#2484c1"   ;//"#a05d56";
-  var color_gov="#65a620"   ;//"#961a1a";
-  var color_reg_serv="#bca44a"   ;//"#e98125";
-  var color_tour="#e98125"   ;//"#d0743c";
-    var color_tour_resort="#BA671E"   ;//"#d0743c";
-    var color_tour_home="#D27421"   ;//"#d0743c";
-  var color_commute="#a05d56"   ;//"#635222";
-  var color_oth_hh="#5b388f"   ;//"#0c6197";
-  var color_retiree="#546e91"   ;//"#7d9058";
-  var color_other="#7d9058"   ;//"#207f33";
+  var color_transfer= "#961a1a" // "#961a1a" ;
+  var color_agr="#be66a2"   ;
+    var color_ag_prod="#985282"   ;
+    var color_ag_inp="#AB5C92"   ;
+  var color_manu="#7b6888"   ;
+  var color_mining="#2484c1"   ;
+  var color_gov="#65a620"   ;
+  var color_reg_serv="#bca44a"   ;
+  var color_tour="#e98125"   ;
+    var color_tour_resort="#BA671E"   ;
+    var color_tour_home="#D27421"   ;
+  var color_commute="#a05d56"   ;
+  var color_oth_hh="#546e91"  //"#5b388f"  ;
+  var color_retiree="#5b388f"  // "#546e91";
+  var color_other="#7d9058"   ;
   
   
   
@@ -520,15 +520,21 @@ config={
           console.log('"other" raw = '+otheremp+', total = '+(otheremp/total));
           if((otheremp/total)>0.01){
             config.data.content.push({ label:'Other*', value: otheremp, color: color_other });  
+            
+            //preview Other Notes string
+            console.log("*Other includes: "+otherstring.substring(0, otherstring.length - 1));
+            updatefooter = "*Other includes: "+otherstring.substring(0, otherstring.length - 1);
+            config.footer.text = updatefooter;
+            config.footer.color = "#ffffff";
+            
           }else{
             console.log('other bin too small to show');
+            updatefooter = "";
+            config.footer.text = updatefooter;
+            config.footer.color = "#ffffff";
           }
 
-          //preview Other Notes string
-          console.log("*Other includes: "+otherstring.substring(0, otherstring.length - 1));
-          updatefooter = "*Other includes: "+otherstring.substring(0, otherstring.length - 1);
-          config.footer.text = updatefooter;
-          config.footer.color = "#ffffff";
+
           
         }
         
