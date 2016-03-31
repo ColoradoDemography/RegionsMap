@@ -1,6 +1,6 @@
 # CO_BaseIndustries
 
-![Base Industries Pie Chart][img/baseimg.jpg]
+![Base Industries Pie Chart](img/baseimg.jpg)
 
 A visualization of Base Industries for Colorado counties using [d3pie](http://d3pie.org/).
 
