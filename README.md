@@ -4,6 +4,6 @@
 
 A visualization of Base Industries for Colorado counties using [d3pie](http://d3pie.org/).
 
-Based upon Colorado State Demography Office [Base Analysis data](http://demography.dola.colorado.gov/economy-labor-force/data/).
+Based upon Colorado State Demography Office [Base Analysis data](https://demography.dola.colorado.gov/economy-labor-force/data/).
 
 
