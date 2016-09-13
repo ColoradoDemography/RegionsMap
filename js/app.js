@@ -2,6 +2,50 @@
   /* OPEN JAVASCRIPT CONSOLE TO SEE LOGIC NOTES IN REALTIME    */
 
   var datayear = "2014";
+
+
+/* description is in the name */
+function fetchJSONFile(path, callback) {
+
+    var httpRequest = new XMLHttpRequest();
+    httpRequest.onreadystatechange = function() {
+        if (httpRequest.readyState === 4) {
+            if (httpRequest.status === 200) {
+                var data = JSON.parse(httpRequest.responseText);
+              
+              for(var i=0; i< data.length; i++){
+                
+                for(key in data[i]){
+                  if(key === 'fips' || key === 'ctype' ){
+                    data[i][key] = parseInt(data[i][key]); 
+                  } else if(key !== 'cname'){
+                    data[i][key] = parseFloat(data[i][key]);
+                  }
+                }
+                
+              }
+              
+                if (callback) callback(data);
+            }
+        }
+    };
+    httpRequest.open('GET', path);
+    httpRequest.send();
+
+}
+
+//load all the data, call init when it's done
+fetchJSONFile("https://gis.dola.colorado.gov/lookups/base-analysis?all=yes", init);
+
+
+
+function init(data){
+  
+  sel.addEventListener('change', function(){
+    changedata(this.value,'yes');
+  });
+  
+  console.log(data);
   
 var select = document.getElementById('sel');
 var opt;
@@ -32,12 +76,12 @@ var updatefooter="";
   //load select control with options based on JSON data
   for(i=0;i<data.length;i=i+1){
     opt = document.createElement('option');
-    opt.value = data[i].FIPS;
-    opt.innerHTML = data[i].Name;
+    opt.value = data[i].fips;
+    opt.innerHTML = data[i].cname;
     select.appendChild(opt);
     
     //defaults to Otero
-    if(data[i].FIPS == 89) {
+    if(data[i].fips == 89) {
         select.selectedIndex = i;
     }
     
@@ -221,29 +265,29 @@ config={
         var othercount=0;
         var otherstring="";
 
-    if(data[i].FIPS==fips){
+    if(data[i].fips==fips){
     
       
-      var total=Number(data[i].TotalBasicEmp)-Number(data[i].IbEmp);
+      var total=Number(data[i].total_basic_emp)-Number(data[i].ib_emp);
       
       
       //new entry
       console.log(' ');
-      console.log(data[i].Name);      
+      console.log(data[i].cname);      
 
-      config.header.title.text = data[i].Name + " Base Industries, " + datayear,
+      config.header.title.text = data[i].cname + " Base Industries, " + datayear,
       
       config.data.content=[];
       
 
-      if((data[i].OtherHhdEmp/total) > min_pie_val){
-        config.data.content.push({ label:'Transfer Payment', value: data[i].OtherHhdEmp, color: color_transfer });
+      if((data[i].other_hhd_emp/total) > min_pie_val){
+        config.data.content.push({ label:'Transfer Payment', value: data[i].other_hhd_emp, color: color_transfer });
       }else{
           //only include into other bin if there is something to include (ie not zero);
-          if(data[i].OtherHhdEmp>0){          
+          if(data[i].other_hhd_emp>0){          
             console.log('Transfer Payment included in other'); 
             othercount=othercount+1;
-            otheremp=otheremp+Number(data[i].OtherHhdEmp);
+            otheremp=otheremp+Number(data[i].other_hhd_emp);
             otherstring=otherstring+" Transfer Payment,";
           }else{
             console.log('Transfer Payment = 0');
@@ -251,24 +295,24 @@ config={
       }  
       
            
-      if((data[i].AgriEmp/total) > min_pie_val){
+      if((data[i].agri_emp/total) > min_pie_val){
         
-        if((data[i].AgriEmp/total) > 0.40){
+        if((data[i].agri_emp/total) > 0.40){
           console.log('Agriculture BIG');
-          config.data.content.push({ label:'Agr. Production', value: data[i].AgProdEmp, color: color_ag_prod });
-          config.data.content.push({ label:'Agr. Inputs', value: data[i].AgInputsEmp, color: color_ag_inp });
-          config.data.content.push({ label:'Agr. Other', value: (Number(data[i].AgProcTradeEmp)+Number(data[i].AgProcEmp)), color: color_agr });
+          config.data.content.push({ label:'Agr. Production', value: data[i].ag_prod_emp, color: color_ag_prod });
+          config.data.content.push({ label:'Agr. Inputs', value: data[i].ag_inputs_emp, color: color_ag_inp });
+          config.data.content.push({ label:'Agr. Other', value: (Number(data[i].ag_proc_trade_emp)+Number(data[i].ag_proc_emp)), color: color_agr });
         }else{
-          config.data.content.push({ label:'Agriculture', value: data[i].AgriEmp, color: color_agr });
+          config.data.content.push({ label:'Agriculture', value: data[i].agri_emp, color: color_agr });
         }
         
 
       }else{
           //only include into other bin if there is something to include (ie not zero);
-          if(data[i].AgriEmp>0){          
+          if(data[i].agri_emp>0){          
             console.log('Agriculture included in other');   
             othercount=othercount+1;            
-            otheremp=otheremp+Number(data[i].AgriEmp);
+            otheremp=otheremp+Number(data[i].agri_emp);
             otherstring=otherstring+" Agriculture,";
           }else{
             console.log('Agriculture = 0');
@@ -280,46 +324,46 @@ config={
       //change to a true condition to see data on mining and manufacturing as a double check
       if(true==false){
         //mining & manufacturing variable tests
-        console.log(((data[i].MiningEmp/total)<min_pie_val));
-        console.log(((data[i].MiningEmp/total)));      
-        console.log(((data[i].ManufEmp/total)<min_pie_val));
-        console.log(((data[i].ManufEmp/total)));      
-        console.log((((data[i].ManufEmp+data[i].MiningEmp)/total)>0.05));
-        console.log((((data[i].ManufEmp+data[i].MiningEmp)/total)));  
+        console.log(((data[i].mining_emp/total)<min_pie_val));
+        console.log(((data[i].mining_emp/total)));      
+        console.log(((data[i].manuf_emp/total)<min_pie_val));
+        console.log(((data[i].manuf_emp/total)));      
+        console.log((((data[i].manuf_emp+data[i].mining_emp)/total)>0.05));
+        console.log((((data[i].manuf_emp+data[i].mining_emp)/total)));  
       }
 
 
       
-      if( ( ((data[i].MiningEmp/total)<min_pie_val) || ((data[i].ManufEmp/total)<min_pie_val) ) && (((data[i].ManufEmp+data[i].MiningEmp)/total)>0.03) ){
+      if( ( ((data[i].mining_emp/total)<min_pie_val) || ((data[i].manuf_emp/total)<min_pie_val) ) && (((data[i].manuf_emp+data[i].mining_emp)/total)>0.03) ){
         //combine mining and manufacturing.  Use name of whichever value is larger
-        if(data[i].ManufEmp>data[i].MiningEmp){
-          config.data.content.push({ label:'Manufacturing', value: (data[i].ManufEmp+data[i].MiningEmp), color: color_manu });
+        if(data[i].manuf_emp>data[i].mining_emp){
+          config.data.content.push({ label:'Manufacturing', value: (data[i].manuf_emp+data[i].mining_emp), color: color_manu });
         }else{
-          config.data.content.push({ label:'Mining', value: (data[i].ManufEmp+data[i].MiningEmp), color: color_mining });          
+          config.data.content.push({ label:'Mining', value: (data[i].manuf_emp+data[i].mining_emp), color: color_mining });          
         }
-        console.log('mining '+(data[i].MiningEmp/total)+' combined into manufacturing '+(data[i].ManufEmp/total));
+        console.log('mining '+(data[i].mining_emp/total)+' combined into manufacturing '+(data[i].manuf_emp/total));
       }else{
-        if((data[i].ManufEmp/total) > min_pie_val){
-          config.data.content.push({ label:'Manufacturing', value: data[i].ManufEmp, color: color_manu });
+        if((data[i].manuf_emp/total) > min_pie_val){
+          config.data.content.push({ label:'Manufacturing', value: data[i].manuf_emp, color: color_manu });
         }else{
           //only include into other bin if there is something to include (ie not zero);          
-          if(data[i].ManufEmp>0){
+          if(data[i].manuf_emp>0){
             console.log('Manufacturing included in other');
             othercount=othercount+1;            
-            otheremp=otheremp+Number(data[i].ManufEmp);
+            otheremp=otheremp+Number(data[i].manuf_emp);
             otherstring=otherstring+" Manufacturing,";
           }else{
             console.log('Manufacturing = 0');
           }
         }
-        if((data[i].MiningEmp/total) > min_pie_val){
-          config.data.content.push({ label:'Mining', value: data[i].MiningEmp, color: color_mining });
+        if((data[i].mining_emp/total) > min_pie_val){
+          config.data.content.push({ label:'Mining', value: data[i].mining_emp, color: color_mining });
         }else{
           //only include into other bin if there is something to include (ie not zero);
-          if(data[i].MiningEmp>0){          
+          if(data[i].mining_emp>0){          
             console.log('Mining included in other'); 
             othercount=othercount+1;            
-            otheremp=otheremp+Number(data[i].MiningEmp);
+            otheremp=otheremp+Number(data[i].mining_emp);
             otherstring=otherstring+" Mining,";
           }else{
             console.log('Mining = 0');
@@ -327,44 +371,44 @@ config={
         }
       }
       
-      if((data[i].GovtEmp/total) > min_pie_val){
-        config.data.content.push({ label:'Government', value: data[i].GovtEmp, color: color_gov });
+      if((data[i].govt_emp/total) > min_pie_val){
+        config.data.content.push({ label:'Government', value: data[i].govt_emp, color: color_gov });
       }else{
           //only include into other bin if there is something to include (ie not zero);
-          if(data[i].GovtEmp>0){          
+          if(data[i].govt_emp>0){          
             console.log('Government included in other');    
             othercount=othercount+1;            
-            otheremp=otheremp+Number(data[i].GovtEmp);
+            otheremp=otheremp+Number(data[i].govt_emp);
             otherstring=otherstring+" Government,";
           }else{
             console.log('Government = 0');
           }
       }
       
-      if((data[i].ReglServEmp/total) > min_pie_val){
-        config.data.content.push({ label:'Regional Service', value: data[i].ReglServEmp, color: color_reg_serv });
+      if((data[i].regl_serv_emp/total) > min_pie_val){
+        config.data.content.push({ label:'Regional Service', value: data[i].regl_serv_emp, color: color_reg_serv });
       }else{
           //only include into other bin if there is something to include (ie not zero);
-          if(data[i].ReglServEmp>0){          
+          if(data[i].regl_serv_emp>0){          
             console.log('Regional Service included in other');     
             othercount=othercount+1;            
-            otheremp=otheremp+Number(data[i].ReglServEmp);
+            otheremp=otheremp+Number(data[i].regl_serv_emp);
             otherstring=otherstring+" Regional Service,";
           }else{
             console.log('Regional Service = 0');
           }
       }
       
-      if((data[i].TourismEmp/total) > min_pie_val){
+      if((data[i].tourism_emp/total) > min_pie_val){
         
                 
-        if((data[i].TourismEmp/total) > 0.40){
+        if((data[i].tourism_emp/total) > 0.40){
           console.log('Tourism BIG');
-          config.data.content.push({ label:'Tourism: Resort', value: data[i].ResortsEmp, color: color_tour_resort });
-          config.data.content.push({ label:'Tourism: 2nd Home', value: data[i].SecondHomeEmp, color: color_tour_home });
-          config.data.content.push({ label:'Tourism: Other', value: (Number(data[i].TourServEmp)+Number(data[i].TransEmp)), color: color_tour });
+          config.data.content.push({ label:'Tourism: Resort', value: data[i].resorts_emp, color: color_tour_resort });
+          config.data.content.push({ label:'Tourism: 2nd Home', value: data[i].second_home_emp, color: color_tour_home });
+          config.data.content.push({ label:'Tourism: Other', value: (Number(data[i].tour_serv_emp)+Number(data[i].trans_emp)), color: color_tour });
         }else{
-          config.data.content.push({ label:'Tourism', value: data[i].TourismEmp, color: color_tour });
+          config.data.content.push({ label:'Tourism', value: data[i].tourism_emp, color: color_tour });
         }
         
         
@@ -372,25 +416,25 @@ config={
 
       }else{
           //only include into other bin if there is something to include (ie not zero);
-          if(data[i].TourismEmp>0){          
+          if(data[i].tourism_emp>0){          
             console.log('Tourism included in other');         
             othercount=othercount+1;            
-            otheremp=otheremp+Number(data[i].TourismEmp);
+            otheremp=otheremp+Number(data[i].tourism_emp);
             otherstring=otherstring+" Tourism,";
           }else{
             console.log('Tourism = 0');
           }
       }      
       
-      if(data[i].CommuterEmp>0){
-        if((data[i].CommuterEmp/total) > min_pie_val){
-          config.data.content.push({ label:'Commuter', value: data[i].CommuterEmp, color: color_commute });  
+      if(data[i].commuter_emp>0){
+        if((data[i].commuter_emp/total) > min_pie_val){
+          config.data.content.push({ label:'Commuter', value: data[i].commuter_emp, color: color_commute });  
         }else{
           //only include into other bin if there is something to include (ie not zero);
-          if(data[i].CommuterEmp>0){
+          if(data[i].commuter_emp>0){
             console.log('commuting included in other');
             othercount=othercount+1;            
-            otheremp=otheremp+Number(data[i].CommuterEmp);
+            otheremp=otheremp+Number(data[i].commuter_emp);
             otherstring=otherstring+" Commuter,";          
           }else{
             console.log('Commuting <= 0');
@@ -402,14 +446,14 @@ config={
       }
 
       
-      if((data[i].OtherIncEmp/total) > min_pie_val){
-        config.data.content.push({ label:'Other Household', value: data[i].OtherIncEmp, color: color_oth_hh });
+      if((data[i].other_inc_emp/total) > min_pie_val){
+        config.data.content.push({ label:'Other Household', value: data[i].other_inc_emp, color: color_oth_hh });
       }else{
           //only include into other bin if there is something to include (ie not zero);
-          if(data[i].OtherIncEmp>0){          
+          if(data[i].other_inc_emp>0){          
             console.log('Other Household included in other');  
             othercount=othercount+1;            
-            otheremp=otheremp+Number(data[i].OtherIncEmp);
+            otheremp=otheremp+Number(data[i].other_inc_emp);
             otherstring=otherstring+" Other Household,";
           }else{
             console.log('Other Household = 0');
@@ -417,14 +461,14 @@ config={
       }      
       
       
-      if((data[i].RetireeEmp/total) > min_pie_val){
-        config.data.content.push({ label:'Retiree', value: data[i].RetireeEmp, color: color_retiree });
+      if((data[i].retiree_emp/total) > min_pie_val){
+        config.data.content.push({ label:'Retiree', value: data[i].retiree_emp, color: color_retiree });
       }else{
           //only include into other bin if there is something to include (ie not zero);
-          if(data[i].RetireeEmp>0){          
+          if(data[i].retiree_emp>0){          
             console.log('Retiree');       
             othercount=othercount+1;            
-            otheremp=otheremp+Number(data[i].RetireeEmp);
+            otheremp=otheremp+Number(data[i].retiree_emp);
             otherstring=otherstring+" Retiree,";
           }else{
             console.log('Retiree = 0');
@@ -538,3 +582,4 @@ config={
   changedata(89, 'no');
   pie = new d3pie("pie", config); 
 
+}
