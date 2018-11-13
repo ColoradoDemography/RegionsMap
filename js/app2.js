@@ -214,6 +214,10 @@ window.onload = function() {
 			      callback: function(value, index, values) {
 			        return commafy(value);
 			      }
+			    },
+			    scaleLabel: {
+			      display: true,
+			      labelString: 'Employees'
 			    }
 			  }]
 			},
