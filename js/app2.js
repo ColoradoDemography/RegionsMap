@@ -141,10 +141,11 @@ selectElem.addEventListener('change', function() {
     }
     //Other
     if(otheremp>0){
-      horizontalBarChartData.labels.push("Other");
+      horizontalBarChartData.labels.push("Other*");
       dataset.backgroundColor.push("black");
       dataset.data.push(otheremp);
       othertext = othertext.substring(0,othertext.length-2);
+      //ctx.fillText(othertext);
       document.getElementById('other').innerHTML = othertext;
       console.log(othertext);
     } else {document.getElementById('other').innerHTML = '';}
