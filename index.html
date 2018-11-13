@@ -1,44 +1,103 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html>
+
 <head>
-	<title>Base Industry Pie Creator</title>
-  
-  <link rel="stylesheet" href="css/app.css">
-  
-      <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-76100845-1', 'auto');
-  ga('set', 'anonymizeIp', true);
-  ga('send', 'pageview');
-</script>
-  
+	<title>Horizontal Bar Chart</title>
+	<script src="node_modules/chart.js/dist/Chart.js"></script>
+	<script src="js/utils.js"></script>
+	<script src="js/saveSvgAsPng.js"></script>
+	<style>
+	canvas {
+		-moz-user-select: none;
+		-webkit-user-select: none;
+		-ms-user-select: none;
+	}
+	</style>
 </head>
+
 <body>
+	<div id="summary">
+    	<a href="https://drive.google.com/open?id=1Ag0JdOo8XATTBiNuh80BTiuqLV4Kv72T">Base Analysis Summary</a>
+    </div>
+	<div class="ui-widget">
+	  <br />
+	  <select id="sel">
+	    <option value="003" >Alamosa</option>
+	    <option value="007" >Archuleta</option>
+	    <option value="009" >Baca</option>
+	    <option value="011" >Bent</option>
+	    <option value="015" >Chaffee</option>
+	    <option value="017" >Cheyenne</option>
+	    <option value="019" >Clear Creek</option>
+	    <option value="021" >Conejos</option>
+	    <option value="023" >Costilla</option>
+	    <option value="025" >Crowley</option>
+	    <option value="027" >Custer</option>
+	    <option value="029" >Delta</option>
+	    <option value="033" >Dolores</option>
+	    <option value="037" >Eagle</option>
+	    <option value="039" >Elbert</option>
+	    <option value="041" >El Paso</option>
+	    <option value="043" >Fremont</option>
+	    <option value="045" >Garfield</option>
+	    <option value="047" >Gilpin</option>
+	    <option value="049" >Grand</option>
+	    <option value="051" >Gunnison</option>
+	    <option value="053" >Hinsdale</option>
+	    <option value="055" >Huerfano</option>
+	    <option value="057" >Jackson</option>
+	    <option value="061" >Kiowa</option>
+	    <option value="063" >Kit Carson</option>
+	    <option value="065" >Lake</option>
+	    <option value="067" >La Plata</option>
+	    <option value="069" >Larimer</option>
+	    <option value="071" >Las Animas</option>
+	    <option value="073" >Lincoln</option>
+	    <option value="075" >Logan</option>
+	    <option value="077" >Mesa</option>
+	    <option value="079" >Mineral</option>
+	    <option value="081" >Moffat</option>
+	    <option value="083" >Montezuma</option>
+	    <option value="085" >Montrose</option>
+	    <option value="087" >Morgan</option>
+	    <option value="089" >Otero</option>
+	    <option value="091" >Ouray</option>
+	    <option value="093" >Park</option>
+	    <option value="095" >Phillips</option>
+	    <option value="097" >Pitkin</option>
+	    <option value="099" >Prowers</option>
+	    <option value="101" >Pueblo</option>
+	    <option value="103" >Rio Blanco</option>
+	    <option value="105" >Rio Grande</option>
+	    <option value="107" >Routt</option>
+	    <option value="109" >Saguache</option>
+	    <option value="111" >San Juan</option>
+	    <option value="113" >San Miguel</option>
+	    <option value="115" >Sedgwick</option>
+	    <option value="117" >Summit</option>
+	    <option value="119" >Teller</option>
+	    <option value="121" >Washington</option>
+	    <option value="123" >Weld</option>
+	    <option value="125" >Yuma</option>
+	    <option value="500" >Denver-Boulder MSA</option>
+	    
+	  </select>
+	</div>
 
-<div id="pie"></div>
-  
-  <div id="selectordiv">
-    <select id="sel">
-    </select>  <br /><br /><br />
-  </div>
-  <div id="exportdiv">
-    <button type="button" id="t_download" class="btn" onclick="saveSvgAsPng(document.getElementsByTagName('svg')[0], 'diagram.png');" tabindex="8" accesskey="i">Download PNG</button>
-  </div>
-  <div id="summary">
-    <a href="https://drive.google.com/open?id=1Ag0JdOo8XATTBiNuh80BTiuqLV4Kv72T">Base Analysis Summary</a>
-  </div>
-	  
-<script src="js/saveSvgAsPng.js" type="text/javascript"></script>
-<!-- <script src="data/base.json"></script> -->
-<script src="js/d3.min.js"></script>
-<script src="js/d3pie.min.js"></script>
-
-  <script src="js/app.js"></script>
-  
+	<div id="container" style="width: 100%; height: 100%" >
+		<canvas id="canvas" width="600" height="300">
+            <p>Your Browser Does Not Support Canvas</p>
+        </canvas>
+	</div>
+	<div id="other">
+		<p>*Other includes: Mining</p> <!-- change based on initial county -->
+	</div>
+	<div id="exportdiv">
+        <button type="button" id="t_download" class="btn" onclick="saveSvgAsPng(document.getElementsByTagName('svg')[0], 'diagram.png');" tabindex="8" accesskey="i">Download PNG</button>
+    </div>
+	<script src="js/app2.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
 </body>
+
 </html>

@@ -25,3 +25,7 @@
     top: 30px;
   }
   
+  .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button, body{
+  font-family: Verdana, serif;
+  
+  }
