@@ -17,11 +17,13 @@ selectElem.addEventListener('change', function() {
     horizontalBarChartData.labels = [];
     dataset.backgroundColor = [];
     dataset.data = [];
+    dataPercent = [];
     //Transfer Payment
     if((selectElemVal[0].other_hhd_emp/total)>minval){  
       horizontalBarChartData.labels.push("Transfer Payment");
       dataset.backgroundColor.push("#961a1a");
       dataset.data.push(selectElemVal[0].other_hhd_emp);
+      dataPercent.push(((selectElemVal[0].other_hhd_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].other_hhd_emp;
       othertext += "Transfer Payment, ";
@@ -32,21 +34,25 @@ selectElem.addEventListener('change', function() {
       	horizontalBarChartData.labels.push("Agriculture Production");
     	  dataset.backgroundColor.push("#985282");
     	  dataset.data.push(selectElemVal[0].ag_prod_emp);
+    	  dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
     	}
     	if((selectElemVal[0].ag_inputs_emp/total)>0){
     	  horizontalBarChartData.labels.push("Agriculture Inputs");
     	  dataset.backgroundColor.push("#AB5C92");
     	  dataset.data.push(selectElemVal[0].ag_inputs_emp);
+    	  dataPercent.push(((selectElemVal[0].ag_inputs_emp/total)*100).toFixed(2));
     	}
     	if((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)>0){
     	  horizontalBarChartData.labels.push("Agriculture Other");
       	dataset.backgroundColor.push("#be66a2");
     	  dataset.data.push(selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp);
+    	  dataPercent.push((((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)/total)*100).toFixed(2));
     	}
     } else if ((selectElemVal[0].agri_emp/total) > minval){
     	horizontalBarChartData.labels.push("Agriculture");
     	dataset.backgroundColor.push("#be66a2");
     	dataset.data.push(selectElemVal[0].agri_emp);
+    	dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].agri_emp;
       othertext += "Agriculture, ";
@@ -56,6 +62,7 @@ selectElem.addEventListener('change', function() {
       horizontalBarChartData.labels.push("Mining");
       dataset.backgroundColor.push("#2484c1");
       dataset.data.push(selectElemVal[0].mining_emp);
+      dataPercent.push(((selectElemVal[0].mining_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].mining_emp;
       othertext += "Mining, ";
@@ -65,6 +72,7 @@ selectElem.addEventListener('change', function() {
       horizontalBarChartData.labels.push("Manufacturing");
       dataset.backgroundColor.push("#7b6888");
       dataset.data.push(selectElemVal[0].manuf_emp);
+      dataPercent.push(((selectElemVal[0].manuf_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].manuf_emp;
       othertext += "Manufacturing, ";
@@ -74,6 +82,7 @@ selectElem.addEventListener('change', function() {
       horizontalBarChartData.labels.push("Government");
       dataset.backgroundColor.push("#65a620");
       dataset.data.push(selectElemVal[0].govt_emp);
+      dataPercent.push(((selectElemVal[0].govt_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].govt_emp;
       othertext += "Government, ";
@@ -83,6 +92,7 @@ selectElem.addEventListener('change', function() {
       horizontalBarChartData.labels.push("Regional Service");
       dataset.backgroundColor.push("#bca44a");
       dataset.data.push(selectElemVal[0].regl_serv_emp);
+      dataPercent.push(((selectElemVal[0].regl_serv_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].regl_serv_emp;
       othertext += "Regional Service, ";
@@ -93,21 +103,25 @@ selectElem.addEventListener('change', function() {
     	  horizontalBarChartData.labels.push("Tourism: Resort");
     	  dataset.backgroundColor.push("#BA671E");
     	  dataset.data.push(selectElemVal[0].resorts_emp);
+    	  dataPercent.push(((selectElemVal[0].resorts_emp/total)*100).toFixed(2));
     	}
       if((selectElemVal[0].second_home_emp/total)>0){
     	  horizontalBarChartData.labels.push("Tourism: 2nd Home");
     	  dataset.backgroundColor.push("#D27421");
     	  dataset.data.push(selectElemVal[0].second_home_emp);
+    	  dataPercent.push(((selectElemVal[0].second_home_emp/total)*100).toFixed(2));
     	}
     	if((selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp)>0){
     	  horizontalBarChartData.labels.push("Tourism: Other");
     	  dataset.backgroundColor.push("#e98125");
     	  dataset.data.push(selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp);
+    	  dataPercent.push((((selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp)/total)*100).toFixed(2));
     	}
     } else if ((selectElemVal[0].tourism_emp/total) > minval){
       horizontalBarChartData.labels.push("Tourism");
       dataset.backgroundColor.push("#e98125");
       dataset.data.push(selectElemVal[0].tourism_emp);
+      dataPercent.push(((selectElemVal[0].tourism_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].tourism_emp;
       othertext += "Tourism, ";
@@ -117,6 +131,7 @@ selectElem.addEventListener('change', function() {
       horizontalBarChartData.labels.push("Commuter");
       dataset.backgroundColor.push("#a05d56");
       dataset.data.push(selectElemVal[0].commuter_emp);
+      dataPercent.push(((selectElemVal[0].commuter_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].commuter_emp;
       othertext += "Commuter, ";
@@ -126,6 +141,7 @@ selectElem.addEventListener('change', function() {
       horizontalBarChartData.labels.push("Other Household");
       dataset.backgroundColor.push("#546e91");
       dataset.data.push(selectElemVal[0].other_inc_emp);
+      dataPercent.push(((selectElemVal[0].other_inc_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].other_inc_emp;
       othertext += "Other Household, ";
@@ -135,6 +151,7 @@ selectElem.addEventListener('change', function() {
       horizontalBarChartData.labels.push("Retiree");
       dataset.backgroundColor.push("#5b388f");
       dataset.data.push(selectElemVal[0].retiree_emp);
+      dataPercent.push(((selectElemVal[0].retiree_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].retiree_emp;
       othertext += "Retiree, ";
@@ -144,14 +161,11 @@ selectElem.addEventListener('change', function() {
       horizontalBarChartData.labels.push("Other*");
       dataset.backgroundColor.push("black");
       dataset.data.push(otheremp);
+      dataPercent.push(((otheremp/total)*100).toFixed(2));
       othertext = othertext.substring(0,othertext.length-2);
-      //ctx.fillText(othertext);
       document.getElementById('other').innerHTML = othertext;
       console.log(othertext);
     } else {document.getElementById('other').innerHTML = '';}
-    
-    //push the necessary values in order of labels below
-    //console.log(dataset.data);
   });
   window.myHorizontalBar.update();
 });
