@@ -215,6 +215,68 @@ window.onload = function() {
             label += ': ';
             label += commafy(Math.round(tooltipItem.xLabel));
             return label;
+			    },
+			    afterLabel: function(tooltipItem, data) {
+			      var exp = '';
+			      switch (tooltipItem.yLabel) {
+			        case 'Transfer Payment':
+			          exp = 'Aka Public Assistance to those under 60.  Includes Medicaid, EITC, SNAP, & Unemployment Insurance compensation.';
+			          break;
+			        case 'Agriculture':
+			          exp = 'Activities related to and supporting agricultural production & processing.';
+			          break;
+			        case 'Mining':
+			          exp = 'Mining operations and mining support.  Includes support activities for oil & gas drilling.';
+			          break;
+			        case 'Manufacturing':
+			          exp = 'Activities related to manufacturing, except agricultural processing.';
+			          break;
+			        case 'Government':
+			          exp = 'State & Federal government employment, including Higher Ed & military.';
+			          break;
+			        case 'Regional Service':
+			          exp = 'Provide services to surrounding region & the nation such as health care, computer systems design, architecture, and transportation.';
+			          break;
+			        case 'Tourism':
+			          exp = 'Activities related to tourism and industries that benefit from the spending of tourists and 2nd homeowners.';
+			          break;
+			        case 'Commuter':
+			          exp = 'Jobs in the local area that are supported by the earnings of commuters working outside the county or region.';
+			          break;
+			        case 'Retiree':
+			          exp = 'Employment associated with the spending of retirees fixed income or savings.  Includes social security, disability and Medicare expenditures.';
+			          break;
+			        case 'Other Household':
+			          exp = 'Jobs supported by unearned income: dividends, interest & rent.';
+			          break;
+			        case 'Other':
+			          exp = 'See footer for small industries listed as other.';
+			          break;
+			      }
+			      return ['',exp];
+			     // if (tooltipItem.yLabel == 'Mining'){
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // } else if (tooltipItem.yLabel == 'Mining') {
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // } else if (tooltipItem.yLabel == 'Mining') {
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // } else if (tooltipItem.yLabel == 'Mining') {
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // } else if (tooltipItem.yLabel == 'Mining') {
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // } else if (tooltipItem.yLabel == 'Mining') {
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // } else if (tooltipItem.yLabel == 'Mining') {
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // } else if (tooltipItem.yLabel == 'Mining') {
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // } else if (tooltipItem.yLabel == 'Mining') {
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // } else if (tooltipItem.yLabel == 'Mining') {
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // } else if (tooltipItem.yLabel == 'Mining') {
+			     //   return ['','Mining operations and mining support. Includes support activities for oil & gas drilling.'];
+			     // }
 			    }
 			  }
 			},  
