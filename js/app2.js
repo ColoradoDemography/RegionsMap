@@ -8,7 +8,6 @@ selectElem.addEventListener('change', function() {
   horizontalBarChartData.datasets.forEach(function(dataset) {
     console.log(selectElem.value);
     selectElemVal = getData(selectElem.value);
-    //console.log(selectElemVal);
     var total=Number(selectElemVal[0].total_basic_emp)-Number(selectElemVal[0].ib_emp);
     var minval=0.01;
     var otheremp=0;
@@ -214,14 +213,7 @@ window.onload = function() {
             var label = data.datasets[tooltipItem.datasetIndex].label || '';
             label += ': ';
             label += commafy(Math.round(tooltipItem.xLabel));
-            // var total = 0;
-            // for (i = 0; i < data.datasets.length; i++) {
-            //   total += data.datasets[i].data[tooltipItem.datasetIndex];
-            // }
-            // console.log(data.datasets.length);
-            // var percentage = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] / total * 100;
-            // percentage = percentage.toFixed(2);
-                  var dataset = data.datasets[tooltipItem.datasetIndex];
+              var dataset = data.datasets[tooltipItem.datasetIndex];
       //calculate the total of this data set
       var total = dataset.data.reduce(function(previousValue, currentValue, currentIndex, array) {
         return previousValue + currentValue;
@@ -232,16 +224,10 @@ window.onload = function() {
       var percentage = Math.floor(((currentValue/total) * 100)+0.5);
             label += ', ';
             label += percentage;
-            label += '% of jobs in county';
+            label += '% of base industry jobs in county';
             return label;
 			    },
 			    afterLabel: function(tooltipItem, data) {
-			     // var sum = data.datasets.reduce((sum, dataset) => {
-        //   	  return sum + dataset.data[tooltipItem.index];
-        //     }, 0);
-        //     var percent = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] / sum * 100;
-        //     percent = percent.toFixed(2); // make a nice string
-        //     return data.datasets[tooltipItem.datasetIndex].label + ': ' + percent + '%';
 			      var exp = '';
 			      switch (tooltipItem.yLabel) {
 			        case 'Transfer Payment':
