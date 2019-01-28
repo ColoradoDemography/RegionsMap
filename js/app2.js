@@ -1,12 +1,12 @@
 var selectElem = document.getElementById('sel');
 
-var startlabels = ['Transfer Payment', 'Agriculture', 'Manufacturing', 'Government', 'Regional Service', 'Tourism', 'Retiree'];
-var startcolors = ["#961a1a", "#be66a2", "#7b6888", "#65a620", "#bca44a", "#e98125", "#5b388f"];
-var startdata = [263,1045,84,1451,2041,810,790]; //Load Alamosa County manually for now
+var startlabels = ['Agriculture', 'Government', 'Manufacturing', 'Regional Service', 'Retiree', 'Tourism', 'Transfer Payment'];
+var startcolors = ["#be66a2", "#65a620", "#7b6888", "#bca44a", "#5b388f", "#e98125", "#961a1a"];
+var startdata = [1045,1451,84,2041,790,810,263]; //Load Alamosa County manually for now
 
 selectElem.addEventListener('change', function() {
   horizontalBarChartData.datasets.forEach(function(dataset) {
-    console.log(selectElem.value);
+    //console.log(selectElem.value);
     selectElemVal = getData(selectElem.value);
     //console.log(selectElemVal);
     var total=Number(selectElemVal[0].total_basic_emp)-Number(selectElemVal[0].ib_emp);
@@ -17,156 +17,162 @@ selectElem.addEventListener('change', function() {
     horizontalBarChartData.labels = [];
     dataset.backgroundColor = [];
     dataset.data = [];
-    dataPercent = [];
-    //Transfer Payment
-    if((selectElemVal[0].other_hhd_emp/total)>minval){  
-      horizontalBarChartData.labels.push("Transfer Payment");
-      dataset.backgroundColor.push("#961a1a");
-      dataset.data.push(selectElemVal[0].other_hhd_emp);
-      dataPercent.push(((selectElemVal[0].other_hhd_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + selectElemVal[0].other_hhd_emp;
-      othertext += "Transfer Payment, ";
-    }
+    //dataPercent = [];
+    
     //Agriculture
     if ((selectElemVal[0].agri_emp/total) > 0.40){
     	if((selectElemVal[0].ag_prod_emp/total)>0){
       	horizontalBarChartData.labels.push("Agriculture Production");
     	  dataset.backgroundColor.push("#985282");
-    	  dataset.data.push(selectElemVal[0].ag_prod_emp);
-    	  dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
+    	  dataset.data.push(Number(selectElemVal[0].ag_prod_emp));
+    	  //dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
     	}
     	if((selectElemVal[0].ag_inputs_emp/total)>0){
     	  horizontalBarChartData.labels.push("Agriculture Inputs");
     	  dataset.backgroundColor.push("#AB5C92");
-    	  dataset.data.push(selectElemVal[0].ag_inputs_emp);
-    	  dataPercent.push(((selectElemVal[0].ag_inputs_emp/total)*100).toFixed(2));
+    	  dataset.data.push(Number(selectElemVal[0].ag_inputs_emp));
+    	  //dataPercent.push(((selectElemVal[0].ag_inputs_emp/total)*100).toFixed(2));
     	}
     	if((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)>0){
     	  horizontalBarChartData.labels.push("Agriculture Other");
       	dataset.backgroundColor.push("#be66a2");
-    	  dataset.data.push(selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp);
-    	  dataPercent.push((((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)/total)*100).toFixed(2));
+    	  dataset.data.push(Number(selectElemVal[0].ag_proc_trade_emp) + Number(selectElemVal[0].ag_proc_emp));
+    	  //dataPercent.push((((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)/total)*100).toFixed(2));
     	}
     } else if ((selectElemVal[0].agri_emp/total) > minval){
     	horizontalBarChartData.labels.push("Agriculture");
     	dataset.backgroundColor.push("#be66a2");
-    	dataset.data.push(selectElemVal[0].agri_emp);
-    	dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
+    	dataset.data.push(Number(selectElemVal[0].agri_emp));
+    	//dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].agri_emp;
       othertext += "Agriculture, ";
     }
-    //Mining
-    if((selectElemVal[0].mining_emp/total)>minval){
-      horizontalBarChartData.labels.push("Mining");
-      dataset.backgroundColor.push("#2484c1");
-      dataset.data.push(selectElemVal[0].mining_emp);
-      dataPercent.push(((selectElemVal[0].mining_emp/total)*100).toFixed(2));
+    //Commuter
+    if((selectElemVal[0].commuter_emp/total)>minval){
+      horizontalBarChartData.labels.push("Commuter");
+      dataset.backgroundColor.push("#a05d56");
+      dataset.data.push(Number(selectElemVal[0].commuter_emp));
+      //dataPercent.push(((selectElemVal[0].commuter_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].mining_emp;
-      othertext += "Mining, ";
-    }
-    //Manufacturing
-    if((selectElemVal[0].manuf_emp/total)>minval){
-      horizontalBarChartData.labels.push("Manufacturing");
-      dataset.backgroundColor.push("#7b6888");
-      dataset.data.push(selectElemVal[0].manuf_emp);
-      dataPercent.push(((selectElemVal[0].manuf_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + selectElemVal[0].manuf_emp;
-      othertext += "Manufacturing, ";
+      otheremp = otheremp + selectElemVal[0].commuter_emp;
+      othertext += "Commuter, ";
     }
     //Government
     if((selectElemVal[0].govt_emp/total)>minval){
       horizontalBarChartData.labels.push("Government");
       dataset.backgroundColor.push("#65a620");
-      dataset.data.push(selectElemVal[0].govt_emp);
-      dataPercent.push(((selectElemVal[0].govt_emp/total)*100).toFixed(2));
+      dataset.data.push(Number(selectElemVal[0].govt_emp));
+      //dataPercent.push(((selectElemVal[0].govt_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].govt_emp;
       othertext += "Government, ";
+    }
+    //Manufacturing
+    if((selectElemVal[0].manuf_emp/total)>minval){
+      horizontalBarChartData.labels.push("Manufacturing");
+      dataset.backgroundColor.push("#7b6888");
+      dataset.data.push(Number(selectElemVal[0].manuf_emp));
+      //dataPercent.push(((selectElemVal[0].manuf_emp/total)*100).toFixed(2));
+    } else {
+      otheremp = otheremp + selectElemVal[0].manuf_emp;
+      othertext += "Manufacturing, ";
+    }
+    //Mining
+    if((selectElemVal[0].mining_emp/total)>minval){
+      horizontalBarChartData.labels.push("Mining");
+      dataset.backgroundColor.push("#2484c1");
+      dataset.data.push(Number(selectElemVal[0].mining_emp));
+      //dataPercent.push(((selectElemVal[0].mining_emp/total)*100).toFixed(2));
+    } else {
+      otheremp = otheremp + selectElemVal[0].mining_emp;
+      othertext += "Mining, ";
+    }
+     //Other Household
+    if((selectElemVal[0].other_inc_emp/total)>minval){
+      horizontalBarChartData.labels.push("Other Household");
+      dataset.backgroundColor.push("#546e91");
+      dataset.data.push(Number(selectElemVal[0].other_inc_emp));
+      //dataPercent.push(((selectElemVal[0].other_inc_emp/total)*100).toFixed(2));
+    } else {
+      otheremp = otheremp + selectElemVal[0].other_inc_emp;
+      othertext += "Other Household, ";
     }
     //Regional Service
     if((selectElemVal[0].regl_serv_emp/total)>minval){
       horizontalBarChartData.labels.push("Regional Service");
       dataset.backgroundColor.push("#bca44a");
-      dataset.data.push(selectElemVal[0].regl_serv_emp);
-      dataPercent.push(((selectElemVal[0].regl_serv_emp/total)*100).toFixed(2));
+      dataset.data.push(Number(selectElemVal[0].regl_serv_emp));
+      //dataPercent.push(((selectElemVal[0].regl_serv_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].regl_serv_emp;
       othertext += "Regional Service, ";
+    }
+    //Retiree
+    if((selectElemVal[0].retiree_emp/total)>minval){
+      horizontalBarChartData.labels.push("Retiree");
+      dataset.backgroundColor.push("#5b388f");
+      dataset.data.push(Number(selectElemVal[0].retiree_emp));
+      //dataPercent.push(((selectElemVal[0].retiree_emp/total)*100).toFixed(2));
+    } else {
+      otheremp = otheremp + selectElemVal[0].retiree_emp;
+      othertext += "Retiree, ";
     }
     //Tourism
     if ((selectElemVal[0].tourism_emp/total) > 0.40){
     	if((selectElemVal[0].resorts_emp/total)>0){
     	  horizontalBarChartData.labels.push("Tourism: Resort");
     	  dataset.backgroundColor.push("#BA671E");
-    	  dataset.data.push(selectElemVal[0].resorts_emp);
-    	  dataPercent.push(((selectElemVal[0].resorts_emp/total)*100).toFixed(2));
+    	  dataset.data.push(Number(selectElemVal[0].resorts_emp));
+    	  //dataPercent.push(((selectElemVal[0].resorts_emp/total)*100).toFixed(2));
     	}
       if((selectElemVal[0].second_home_emp/total)>0){
     	  horizontalBarChartData.labels.push("Tourism: 2nd Home");
     	  dataset.backgroundColor.push("#D27421");
-    	  dataset.data.push(selectElemVal[0].second_home_emp);
-    	  dataPercent.push(((selectElemVal[0].second_home_emp/total)*100).toFixed(2));
+    	  dataset.data.push(Number(selectElemVal[0].second_home_emp));
+    	  //dataPercent.push(((selectElemVal[0].second_home_emp/total)*100).toFixed(2));
     	}
     	if((selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp)>0){
     	  horizontalBarChartData.labels.push("Tourism: Other");
     	  dataset.backgroundColor.push("#e98125");
-    	  dataset.data.push(selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp);
-    	  dataPercent.push((((selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp)/total)*100).toFixed(2));
+    	  dataset.data.pushNumber((selectElemVal[0].tour_serve_emp) + Number(selectElemVal[0].trans_emp));
+    	  //dataPercent.push((((selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp)/total)*100).toFixed(2));
     	}
     } else if ((selectElemVal[0].tourism_emp/total) > minval){
       horizontalBarChartData.labels.push("Tourism");
       dataset.backgroundColor.push("#e98125");
-      dataset.data.push(selectElemVal[0].tourism_emp);
-      dataPercent.push(((selectElemVal[0].tourism_emp/total)*100).toFixed(2));
+      dataset.data.push(Number(selectElemVal[0].tourism_emp));
+      //dataPercent.push(((selectElemVal[0].tourism_emp/total)*100).toFixed(2));
     } else {
       otheremp = otheremp + selectElemVal[0].tourism_emp;
       othertext += "Tourism, ";
     }
-    //Commuter
-    if((selectElemVal[0].commuter_emp/total)>minval){
-      horizontalBarChartData.labels.push("Commuter");
-      dataset.backgroundColor.push("#a05d56");
-      dataset.data.push(selectElemVal[0].commuter_emp);
-      dataPercent.push(((selectElemVal[0].commuter_emp/total)*100).toFixed(2));
+    
+    //Transfer Payment
+    if((selectElemVal[0].other_hhd_emp/total)>minval){  
+      horizontalBarChartData.labels.push("Transfer Payment");
+      dataset.backgroundColor.push("#961a1a");
+      dataset.data.push(Number(selectElemVal[0].other_hhd_emp));
+      //dataPercent.push(((selectElemVal[0].other_hhd_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].commuter_emp;
-      othertext += "Commuter, ";
-    }
-    //Other Household
-    if((selectElemVal[0].other_inc_emp/total)>minval){
-      horizontalBarChartData.labels.push("Other Household");
-      dataset.backgroundColor.push("#546e91");
-      dataset.data.push(selectElemVal[0].other_inc_emp);
-      dataPercent.push(((selectElemVal[0].other_inc_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + selectElemVal[0].other_inc_emp;
-      othertext += "Other Household, ";
-    }
-    //Retiree
-    if((selectElemVal[0].retiree_emp/total)>minval){
-      horizontalBarChartData.labels.push("Retiree");
-      dataset.backgroundColor.push("#5b388f");
-      dataset.data.push(selectElemVal[0].retiree_emp);
-      dataPercent.push(((selectElemVal[0].retiree_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + selectElemVal[0].retiree_emp;
-      othertext += "Retiree, ";
+      otheremp = otheremp + selectElemVal[0].other_hhd_emp;
+      othertext += "Transfer Payment, ";
     }
     //Other
     if(otheremp>0){
       horizontalBarChartData.labels.push("Other*");
       dataset.backgroundColor.push("black");
-      dataset.data.push(otheremp);
-      dataPercent.push(((otheremp/total)*100).toFixed(2));
+      dataset.data.push(Number(otheremp));
+      //dataPercent.push(((otheremp/total)*100).toFixed(2));
       othertext = othertext.substring(0,othertext.length-2);
       document.getElementById('other').innerHTML = othertext;
       console.log(othertext);
-    } else {document.getElementById('other').innerHTML = '';}
+    } else {
+      document.getElementById('other').innerHTML = '';
+    }
+
   });
+  
   window.myHorizontalBar.update();
 });
 
@@ -198,6 +204,7 @@ var horizontalBarChartData = {
 	
 };
 		
+
 		
 window.onload = function() {
 	var ctx = document.getElementById('canvas').getContext('2d');
@@ -208,6 +215,7 @@ window.onload = function() {
 		options: {
 			// Elements options apply to all of the options unless overridden in a dataset
 			// In this case, we are setting the border of each horizontal bar to be 2px wide
+
 			tooltips: {
 			  callbacks: {
 			    label: function(tooltipItem, data) {
@@ -244,6 +252,15 @@ window.onload = function() {
 			        case 'Agriculture':
 			          exp = 'Activities related to and supporting agricultural production & processing.';
 			          break;
+			        case 'Agriculture Inputs':
+			          exp = 'Goods and services such as fertilizer, seeds or equipment used in agriculture production.';
+			          break;
+			        case 'Agriculture Production':
+			          exp = 'Raising crops and livestock for sale.';
+			          break;
+			        case 'Agriculture Other':
+			          exp = 'Activities that add value to ag products and prepares/transports them for market.';
+			          break;
 			        case 'Mining':
 			          exp = 'Mining operations and mining support.  Includes support activities for oil & gas drilling.';
 			          break;
@@ -258,6 +275,15 @@ window.onload = function() {
 			          break;
 			        case 'Tourism':
 			          exp = 'Activities related to tourism and industries that benefit from the spending of tourists and 2nd homeowners.';
+			          break;
+			        case 'Tourism: Resort':
+			          exp = 'Ski and summer resorts, National Parks, amusement parks, scenic railways and accommodations at hotels, VRBO and campgrounds.';
+			          break;
+			        case 'Tourism: 2nd Home':
+			          exp = 'The construction and upkeep of second homes and condominiums and fees paid to property management, maintenance, landscaping and cleaning services.';
+			          break;
+			        case 'Tourism: Other':
+			          exp = 'Other activities related to tourism and industries that benefit from the spending of tourists such as eating, drinking and transportation.';
 			          break;
 			        case 'Commuter':
 			          exp = 'Jobs in the local area that are supported by the earnings of commuters working outside the county or region.';
@@ -323,4 +349,33 @@ function commafy(nStr) {
         x1 = x1.replace(rgx, '$1' + ',' + '$2');
     }
     return x1 + x2;
+}
+
+function alphanum(a, b) {
+  function chunkify(t) {
+    var tz = [], x = 0, y = -1, n = 0, i, j;
+
+    while (i = (j = t.charAt(x++)).charCodeAt(0)) {
+      var m = (i == 46 || (i >=48 && i <= 57));
+      if (m !== n) {
+        tz[++y] = "";
+        n = m;
+      }
+      tz[y] += j;
+    }
+    return tz;
+  }
+
+  var aa = chunkify(a);
+  var bb = chunkify(b);
+
+  for (x = 0; aa[x] && bb[x]; x++) {
+    if (aa[x] !== bb[x]) {
+      var c = Number(aa[x]), d = Number(bb[x]);
+      if (c == aa[x] && d == bb[x]) {
+        return c - d;
+      } else return (aa[x] > bb[x]) ? 1 : -1;
+    }
+  }
+  return aa.length - bb.length;
 }
