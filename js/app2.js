@@ -331,7 +331,7 @@ window.onload = function() {
 			},
 			title: {
 				display: true,
-				text: 'Alamosa Base Industries, 2017'
+				text: 'Alamosa Base Industries, 2018'
 			}
 		}
 	});
