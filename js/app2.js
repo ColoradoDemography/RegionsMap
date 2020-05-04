@@ -65,7 +65,7 @@ selectElem.addEventListener('change', function() {
       dataset.data.push(Number(selectElemVal[0].govt_emp));
       //dataPercent.push(((selectElemVal[0].govt_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + NumberselectElemVal[0].govt_emp);
+      otheremp = otheremp + Number(selectElemVal[0].govt_emp);
       othertext += "Government, ";
     }
     //Manufacturing
