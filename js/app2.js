@@ -45,7 +45,7 @@ selectElem.addEventListener('change', function() {
     	dataset.data.push(Number(selectElemVal[0].agri_emp));
     	//dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].agri_emp;
+      otheremp = otheremp + Number(selectElemVal[0].agri_emp);
       othertext += "Agriculture, ";
     }
     //Commuter
@@ -55,7 +55,7 @@ selectElem.addEventListener('change', function() {
       dataset.data.push(Number(selectElemVal[0].commuter_emp));
       //dataPercent.push(((selectElemVal[0].commuter_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].commuter_emp;
+      otheremp = otheremp + Number(selectElemVal[0].commuter_emp);
       othertext += "Commuter, ";
     }
     //Government
@@ -65,7 +65,7 @@ selectElem.addEventListener('change', function() {
       dataset.data.push(Number(selectElemVal[0].govt_emp));
       //dataPercent.push(((selectElemVal[0].govt_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].govt_emp;
+      otheremp = otheremp + NumberselectElemVal[0].govt_emp);
       othertext += "Government, ";
     }
     //Manufacturing
@@ -75,7 +75,7 @@ selectElem.addEventListener('change', function() {
       dataset.data.push(Number(selectElemVal[0].manuf_emp));
       //dataPercent.push(((selectElemVal[0].manuf_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].manuf_emp;
+      otheremp = otheremp + Number(selectElemVal[0].manuf_emp);
       othertext += "Manufacturing, ";
     }
     //Mining
@@ -85,7 +85,7 @@ selectElem.addEventListener('change', function() {
       dataset.data.push(Number(selectElemVal[0].mining_emp));
       //dataPercent.push(((selectElemVal[0].mining_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].mining_emp;
+      otheremp = otheremp + Number(selectElemVal[0].mining_emp);
       othertext += "Mining, ";
     }
      //Other Household
@@ -95,7 +95,7 @@ selectElem.addEventListener('change', function() {
       dataset.data.push(Number(selectElemVal[0].other_inc_emp));
       //dataPercent.push(((selectElemVal[0].other_inc_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].other_inc_emp;
+      otheremp = otheremp + Number(selectElemVal[0].other_inc_emp);
       othertext += "Other Household, ";
     }
     //Regional Service
@@ -105,7 +105,7 @@ selectElem.addEventListener('change', function() {
       dataset.data.push(Number(selectElemVal[0].regl_serv_emp));
       //dataPercent.push(((selectElemVal[0].regl_serv_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].regl_serv_emp;
+      otheremp = otheremp + Number(selectElemVal[0].regl_serv_emp);
       othertext += "Regional Service, ";
     }
     //Retiree
@@ -115,7 +115,7 @@ selectElem.addEventListener('change', function() {
       dataset.data.push(Number(selectElemVal[0].retiree_emp));
       //dataPercent.push(((selectElemVal[0].retiree_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].retiree_emp;
+      otheremp = otheremp + Number(selectElemVal[0].retiree_emp);
       othertext += "Retiree, ";
     }
     //Tourism
@@ -144,7 +144,7 @@ selectElem.addEventListener('change', function() {
       dataset.data.push(Number(selectElemVal[0].tourism_emp));
       //dataPercent.push(((selectElemVal[0].tourism_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].tourism_emp;
+      otheremp = otheremp + Number(selectElemVal[0].tourism_emp);
       othertext += "Tourism, ";
     }
     
@@ -155,7 +155,7 @@ selectElem.addEventListener('change', function() {
       dataset.data.push(Number(selectElemVal[0].other_hhd_emp));
       //dataPercent.push(((selectElemVal[0].other_hhd_emp/total)*100).toFixed(2));
     } else {
-      otheremp = otheremp + selectElemVal[0].other_hhd_emp;
+      otheremp = otheremp + Number(selectElemVal[0].other_hhd_emp);
       othertext += "Transfer Payment, ";
     }
     //Other
