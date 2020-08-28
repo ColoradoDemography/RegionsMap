@@ -13,7 +13,7 @@ selectElem.addEventListener('change', function() {
     var minval=0.01;
     var otheremp=0;
     var othertext = "*Other includes: ";
-    window.myHorizontalBar.options.title.text = selectElem.options[selectElem.selectedIndex].text + " Base Industries, 2018";
+    window.myHorizontalBar.options.title.text = selectElem.options[selectElem.selectedIndex].text + " Base Industries, 2019";
     horizontalBarChartData.labels = [];
     dataset.backgroundColor = [];
     dataset.data = [];
@@ -331,7 +331,7 @@ window.onload = function() {
 			},
 			title: {
 				display: true,
-				text: 'Alamosa Base Industries, 2018'
+				text: 'Alamosa Base Industries, 2019'
 			}
 		}
 	});
