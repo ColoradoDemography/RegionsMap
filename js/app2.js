@@ -1,8 +1,9 @@
 var selectElem = document.getElementById('sel');
 
-var startlabels = ['Agriculture', 'Government', 'Manufacturing', 'Regional Service', 'Retiree', 'Tourism', 'Transfer Payment'];
-var startcolors = ["#be66a2", "#65a620", "#7b6888", "#bca44a", "#5b388f", "#e98125", "#961a1a"];
-var startdata = [1045,1451,84,2041,790,810,263]; //Load Alamosa County manually for now
+//change these to reflect Alamosa
+var startlabels = ['Agriculture', 'Government', 'Manufacturing', 'Other Household', 'Regional Service', 'Retiree', 'Tourism', 'Transfer Payment'];
+var startcolors = ["#be66a2", "#65a620", "#7b6888", #546e91, "#bca44a", "#5b388f", "#e98125", "#961a1a"];
+var startdata = [1025,1437,93,197,2242,829,801,262]; //Load Alamosa County manually for now
 
 selectElem.addEventListener('change', function() {
   horizontalBarChartData.datasets.forEach(function(dataset) {
