@@ -8,6 +8,8 @@ var startdata = [981,1392,88,268,2107,770,708,268]; //Load Alamosa County manual
 selectElem.addEventListener('change', function() {
   horizontalBarChartData.datasets.forEach(function(dataset) {
     //console.log(selectElem.value);
+    //if (selectElem.value > 200){selectElemV = selectElem.value.slice(-2)}else{selectElemV = selectElem.value};
+    //console.log(selectElemV);
     selectElemVal = getData(selectElem.value);
     //console.log(selectElemVal);
     var total=Number(selectElemVal[0].total_basic_emp)-Number(selectElemVal[0].ib_emp);
@@ -181,23 +183,17 @@ selectElem.addEventListener('change', function() {
 
 function getData(fips) {
 
-  if (fips < 200){
+  if (fips > 200){
+    regnum = fips - 500;
+    fips = "reg"+regnum;
+    console.log(fips);
+  }
   var data = $.ajax({
    url: "https://gis.dola.colorado.gov/lookups/base-analysis?county="+fips,
    dataType: 'json',
    async: false,
 
-   });}
-else
-{
-var reg = fips - 500;  
-var data = $.ajax({
-   url: "https://gis.dola.colorado.gov/lookups/base-analysis?region="+reg,
-   dataType: 'json',
-   async: false,
-
-   });}	
-
+   });
   return data.responseJSON;
  
 }
