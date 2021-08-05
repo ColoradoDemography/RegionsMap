@@ -181,12 +181,22 @@ selectElem.addEventListener('change', function() {
 
 function getData(fips) {
 
+  if (fips < 200){
   var data = $.ajax({
    url: "https://gis.dola.colorado.gov/lookups/base-analysis?county="+fips,
    dataType: 'json',
    async: false,
 
-   });
+   });}
+else
+{
+var reg = fips - 500;  
+var data = $.ajax({
+   url: "https://gis.dola.colorado.gov/lookups/base-analysis?region="+reg,
+   dataType: 'json',
+   async: false,
+
+   });}	
 
   return data.responseJSON;
  
