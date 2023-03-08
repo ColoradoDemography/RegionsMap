@@ -16,7 +16,7 @@ selectElem.addEventListener('change', function() {
     var minval=0.01;
     var otheremp=0;
     var othertext = "*Other includes: ";
-    window.myHorizontalBar.options.title.text = selectElem.options[selectElem.selectedIndex].text + " Base Industries, 2021";
+    window.myHorizontalBar.options.title.text = selectElem.options[selectElem.selectedIndex].text + " Base Industries, 2020";
     horizontalBarChartData.labels = [];
     dataset.backgroundColor = [];
     dataset.data = [];
