@@ -1,6 +1,6 @@
 var selectElem = document.getElementById('sel');
 
-//change these to reflect Alamosa
+//change these to reflect Alamosa when making the annual update
 var startlabels = ['Agriculture', 'Government', 'Manufacturing', 'Other Household', 'Regional Service', 'Retiree', 'Tourism', 'Transfer Payment'];
 var startcolors = ["#be66a2", "#65a620", "#7b6888", "#546e91", "#bca44a", "#5b388f", "#e98125", "#961a1a"];
 var startdata = [992,1389,129,137,2078,695,756,436]; //Load Alamosa County manually for now
