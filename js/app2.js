@@ -241,7 +241,7 @@ window.onload = function() {
             var percentage = Math.floor(((currentValue/total) * 100)+0.5);
               label += ', ';
               label += percentage;
-              label += '% of jobs in county';
+              label += '% of direct base jobs in county';
               return label;
   			    },
 			    afterLabel: function(tooltipItem, data) {
