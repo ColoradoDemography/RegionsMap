@@ -338,7 +338,7 @@ window.onload = function() {
 			},
 			title: {
 				display: true,
-				text: 'Alamosa Base Industries, 2020'
+				text: 'Alamosa Base Industries, 2021'
 			}
 		}
 	});
