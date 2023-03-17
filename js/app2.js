@@ -3,7 +3,7 @@ var selectElem = document.getElementById('sel');
 //change these to reflect Alamosa
 var startlabels = ['Agriculture', 'Government', 'Manufacturing', 'Other Household', 'Regional Service', 'Retiree', 'Tourism', 'Transfer Payment'];
 var startcolors = ["#be66a2", "#65a620", "#7b6888", "#546e91", "#bca44a", "#5b388f", "#e98125", "#961a1a"];
-var startdata = [1025,1437,93,197,2242,829,801,262]; //Load Alamosa County manually for now
+var startdata = [992,1389,129,436,2078,695,756,29]; //Load Alamosa County manually for now
 
 selectElem.addEventListener('change', function() {
   horizontalBarChartData.datasets.forEach(function(dataset) {
@@ -16,7 +16,7 @@ selectElem.addEventListener('change', function() {
     var minval=0.01;
     var otheremp=0;
     var othertext = "*Other includes: ";
-    window.myHorizontalBar.options.title.text = selectElem.options[selectElem.selectedIndex].text + " Base Industries, 2020";
+    window.myHorizontalBar.options.title.text = selectElem.options[selectElem.selectedIndex].text + " Base Industries, 2021";
     horizontalBarChartData.labels = [];
     dataset.backgroundColor = [];
     dataset.data = [];
