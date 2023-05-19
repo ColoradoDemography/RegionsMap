@@ -5,224 +5,61 @@ var startlabels = ['0 to 4', '5 to 9', '10 to 14', '15 to 19', '20 to 24', '25 t
 var startcolors = ["#be66a2", "#65a620", "#7b6888", "#546e91", "#bca44a", "#5b388f", "#e98125", "#961a1a"];
 var startdata = [992,1389,129,137,2078,695,756,436,0,0,992,1389,129,137,2078,695,756,436,0,0]; //Load Alamosa County manually for now
 
-selectElem.addEventListener('change', function() {
-  lineChartData.datasets.forEach(function(dataset) {
-    console.log(selectElem.value);
-    //if (selectElem.value > 200){selectElemV = selectElem.value.slice(-2)}else{selectElemV = selectElem.value};
-    //console.log(selectElemV);
-    selectElemVal = getData(selectElem.value);
-    console.log(selectElemVal);
-    //var total=Number(selectElemVal[0].total_basic_emp)-Number(selectElemVal[0].ib_emp);
-    var minval=0.01;
-    var otheremp=0;
-    var othertext = "*Other includes: ";
-    window.myLine.options.title.text = selectElem.options[selectElem.selectedIndex].text + " 5 Year Age Ranges";
-    lineChartData.labels = [];
-    dataset.backgroundColor = [];
-    dataset.data = [];
-    //dataPercent = [];
-    
-    //Agriculture
-    /* if ((selectElemVal[0].agri_emp/total) > 0.40){
-    	if((selectElemVal[0].ag_prod_emp/total)>0){
-      	lineChartData.labels.push("Agriculture Production");
-    	  dataset.backgroundColor.push("#985282");
-    	  dataset.data.push(Number(selectElemVal[0].ag_prod_emp));
-    	  //dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
-    	}
-    	if((selectElemVal[0].ag_inputs_emp/total)>0){
-    	  lineChartData.labels.push("Agriculture Inputs");
-    	  dataset.backgroundColor.push("#AB5C92");
-    	  dataset.data.push(Number(selectElemVal[0].ag_inputs_emp));
-    	  //dataPercent.push(((selectElemVal[0].ag_inputs_emp/total)*100).toFixed(2));
-    	}
-    	if((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)>0){
-    	  lineChartData.labels.push("Agriculture Other");
-      	dataset.backgroundColor.push("#be66a2");
-    	  dataset.data.push(Number(selectElemVal[0].ag_proc_trade_emp) + Number(selectElemVal[0].ag_proc_emp));
-    	  //dataPercent.push((((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)/total)*100).toFixed(2));
-    	}
-    } else if ((selectElemVal[0].agri_emp/total) > minval){
-    	lineChartData.labels.push("Agriculture");
-    	dataset.backgroundColor.push("#be66a2");
-    	dataset.data.push(Number(selectElemVal[0].agri_emp));
-    	//dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].agri_emp);
-      othertext += "Agriculture, ";
-    }
-    //Commuter
-    if((selectElemVal[0].commuter_emp/total)>minval){
-      lineChartData.labels.push("Commuter");
-      dataset.backgroundColor.push("#a05d56");
-      dataset.data.push(Number(selectElemVal[0].commuter_emp));
-      //dataPercent.push(((selectElemVal[0].commuter_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].commuter_emp);
-      othertext += "Commuter, ";
-    }
-    //Government
-    if((selectElemVal[0].govt_emp/total)>minval){
-      lineChartData.labels.push("Government");
-      dataset.backgroundColor.push("#65a620");
-      dataset.data.push(Number(selectElemVal[0].govt_emp));
-      //dataPercent.push(((selectElemVal[0].govt_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].govt_emp);
-      othertext += "Government, ";
-    }
-    //Manufacturing
-    if((selectElemVal[0].manuf_emp/total)>minval){
-      lineChartData.labels.push("Manufacturing");
-      dataset.backgroundColor.push("#7b6888");
-      dataset.data.push(Number(selectElemVal[0].manuf_emp));
-      //dataPercent.push(((selectElemVal[0].manuf_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].manuf_emp);
-      othertext += "Manufacturing, ";
-    }
-    //Mining
-    if((selectElemVal[0].mining_emp/total)>minval){
-      lineChartData.labels.push("Mining");
-      dataset.backgroundColor.push("#2484c1");
-      dataset.data.push(Number(selectElemVal[0].mining_emp));
-      //dataPercent.push(((selectElemVal[0].mining_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].mining_emp);
-      othertext += "Mining, ";
-    }
-     //Other Household
-    if((selectElemVal[0].other_inc_emp/total)>minval){
-      lineChartData.labels.push("Other Household");
-      dataset.backgroundColor.push("#546e91");
-      dataset.data.push(Number(selectElemVal[0].other_inc_emp));
-      //dataPercent.push(((selectElemVal[0].other_inc_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].other_inc_emp);
-      othertext += "Other Household, ";
-    }
-    //Regional Service
-    if((selectElemVal[0].regl_serv_emp/total)>minval){
-      lineChartData.labels.push("Regional Service");
-      dataset.backgroundColor.push("#bca44a");
-      dataset.data.push(Number(selectElemVal[0].regl_serv_emp));
-      //dataPercent.push(((selectElemVal[0].regl_serv_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].regl_serv_emp);
-      othertext += "Regional Service, ";
-    }
-    //Retiree
-    if((selectElemVal[0].retiree_emp/total)>minval){
-      lineChartData.labels.push("Retiree");
-      dataset.backgroundColor.push("#5b388f");
-      dataset.data.push(Number(selectElemVal[0].retiree_emp));
-      //dataPercent.push(((selectElemVal[0].retiree_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].retiree_emp);
-      othertext += "Retiree, ";
-    }
-    //Tourism
-    if ((selectElemVal[0].tourism_emp/total) > 0.40){
-    	if((selectElemVal[0].resorts_emp/total)>0){
-    	  lineChartData.labels.push("Tourism: Resort");
-    	  dataset.backgroundColor.push("#BA671E");
-    	  dataset.data.push(Number(selectElemVal[0].resorts_emp));
-    	  //dataPercent.push(((selectElemVal[0].resorts_emp/total)*100).toFixed(2));
-    	}
-      if((selectElemVal[0].second_home_emp/total)>0){
-    	  lineChartData.labels.push("Tourism: 2nd Home");
-    	  dataset.backgroundColor.push("#D27421");
-    	  dataset.data.push(Number(selectElemVal[0].second_home_emp));
-    	  //dataPercent.push(((selectElemVal[0].second_home_emp/total)*100).toFixed(2));
-    	}
-    	if((selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp)>0){
-    	  lineChartData.labels.push("Tourism: Other");
-    	  dataset.backgroundColor.push("#e98125");
-    	  dataset.data.pushNumber((selectElemVal[0].tour_serve_emp) + Number(selectElemVal[0].trans_emp));
-    	  //dataPercent.push((((selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp)/total)*100).toFixed(2));
-    	}
-    } else if ((selectElemVal[0].tourism_emp/total) > minval){
-      lineChartData.labels.push("Tourism");
-      dataset.backgroundColor.push("#e98125");
-      dataset.data.push(Number(selectElemVal[0].tourism_emp));
-      //dataPercent.push(((selectElemVal[0].tourism_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].tourism_emp);
-      othertext += "Tourism, ";
-    }
-    
-    //Transfer Payment
-    if((selectElemVal[0].other_hhd_emp/total)>minval){  
-      lineChartData.labels.push("Transfer Payment");
-      dataset.backgroundColor.push("#961a1a");
-      dataset.data.push(Number(selectElemVal[0].other_hhd_emp));
-      //dataPercent.push(((selectElemVal[0].other_hhd_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].other_hhd_emp);
-      othertext += "Transfer Payment, ";
-    }
-    //Other
-    if(otheremp>0){
-      lineChartData.labels.push("Other*");
-      dataset.backgroundColor.push("black");
-      dataset.data.push(Number(otheremp));
-      //dataPercent.push(((otheremp/total)*100).toFixed(2));
-      othertext = othertext.substring(0,othertext.length-2);
-      document.getElementById('other').innerHTML = othertext;
-      console.log(othertext);
-    } else {
-      document.getElementById('other').innerHTML = '';
-    } */
-
-  });
-  
-  window.myLine.update();
-});
-
-https://gis.dola.colorado.gov/lookups/sya_regions?reg_num=0&year=2020&choice=5yr
-
-function getData(fips) {
-  var url = "https://gis.dola.colorado.gov/lookups/sya?county="+fips+"&year=2020&choice=5yr";
-  if (fips = "0"){
-    console.log("True");
-    url = "https://gis.dola.colorado.gov/lookups/sya_regions?reg_num=0&year=2020&choice=5yr";
-  } 
-  console.log(url);
-  var data = $.ajax({
-   url: url,
-   dataType: 'json',
-   async: false,
-
-   });
-   console.log(data.responseJSON);
-  return data.responseJSON;
- 
-}
-
-
-var lineChartData = {
-	labels: startlabels,
-	datasets: [{
-		label: 'Population',
-		backgroundColor: startcolors,
-		borderColor: window.chartColors.black,
-		borderWidth: .5,
-    fill: false,
-		data: startdata
-	}]
-	
-};
-		
-
-		
 window.onload = function() {
 	var ctx = document.getElementById('canvas').getContext('2d');
-
+  var firstdata = getData(1);
+  var seconddata = getData2();
+  
+  var sdodata = [];
+  var censusdata = [];
+  for (i in firstdata){
+    sdodata.push(Number(firstdata[i].totalpopulation));
+  }
+  //console.log(sdodata);
+  for (j in seconddata){
+    if (seconddata[j].countyfips == 1){
+      censusdata.push(Number(seconddata[j].Age0));
+      censusdata.push(Number(seconddata[j].Age5));
+      censusdata.push(Number(seconddata[j].Age10));
+      censusdata.push(Number(seconddata[j].Age15));
+      censusdata.push(Number(seconddata[j].Age20));
+      censusdata.push(Number(seconddata[j].Age25));
+      censusdata.push(Number(seconddata[j].Age30));
+      censusdata.push(Number(seconddata[j].Age35));
+      censusdata.push(Number(seconddata[j].Age40));
+      censusdata.push(Number(seconddata[j].Age45));
+      censusdata.push(Number(seconddata[j].Age50));
+      censusdata.push(Number(seconddata[j].Age55));
+      censusdata.push(Number(seconddata[j].Age60));
+      censusdata.push(Number(seconddata[j].Age65));
+      censusdata.push(Number(seconddata[j].Age70));
+      censusdata.push(Number(seconddata[j].Age75));
+      censusdata.push(Number(seconddata[j].Age80));
+      censusdata.push(Number(seconddata[j].Age85));
+      censusdata.push(Number(seconddata[j].Age90));
+      censusdata.push(Number(seconddata[j].Age95));
+    }
+    
+  }
 	window.myLine = new Chart(ctx, {
 		type: 'line',
-		data: lineChartData,
+		//data: lineChartData,
+    
+    data: {
+      datasets:[{
+        label: "SDO",
+        data: sdodata
+      },
+      {
+        label: "Census",
+        data: censusdata
+      }
+    ],
+      labels: startlabels,
+    },
 		options: {
-			// Elements options apply to all of the options unless overridden in a dataset
+
+      // Elements options apply to all of the options unless overridden in a dataset
 			// In this case, we are setting the border of each horizontal bar to be 2px wide
 
 			tooltips: {
@@ -298,6 +135,154 @@ window.onload = function() {
 	});
 			
 };
+
+selectElem.addEventListener('change', function() {
+  //var firstdata = getData(selectElem.value);
+  //var reloaddata = [];
+  //for (i in firstdata){
+  //  reloaddata.push(Number(firstdata[i].totalpopulation));
+  //}
+  //data = getData(selectElem.value);
+  myLine.data.datasets.forEach(dataset => {
+    //console.log(selectElem.value);
+    //if (selectElem.value > 200){selectElemV = selectElem.value.slice(-2)}else{selectElemV = selectElem.value};
+    //console.log(selectElemV);
+    selectElemVal = getData(selectElem.value);
+    seconddata = getData2();
+    console.log(selectElemVal);
+    var sdodata = [];
+    var censusdata = []
+    for (i in selectElemVal){
+      sdodata.push(Number(selectElemVal[i].totalpopulation));
+    }
+
+    //dataset.data = sdodata;
+
+    for (j in seconddata){
+      if (seconddata[j].countyfips == selectElem.value){
+        censusdata.push(Number(seconddata[j].Age0));
+        censusdata.push(Number(seconddata[j].Age5));
+        censusdata.push(Number(seconddata[j].Age10));
+        censusdata.push(Number(seconddata[j].Age15));
+        censusdata.push(Number(seconddata[j].Age20));
+        censusdata.push(Number(seconddata[j].Age25));
+        censusdata.push(Number(seconddata[j].Age30));
+        censusdata.push(Number(seconddata[j].Age35));
+        censusdata.push(Number(seconddata[j].Age40));
+        censusdata.push(Number(seconddata[j].Age45));
+        censusdata.push(Number(seconddata[j].Age50));
+        censusdata.push(Number(seconddata[j].Age55));
+        censusdata.push(Number(seconddata[j].Age60));
+        censusdata.push(Number(seconddata[j].Age65));
+        censusdata.push(Number(seconddata[j].Age70));
+        censusdata.push(Number(seconddata[j].Age75));
+        censusdata.push(Number(seconddata[j].Age80));
+        censusdata.push(Number(seconddata[j].Age85));
+        censusdata.push(Number(seconddata[j].Age90));
+        censusdata.push(Number(seconddata[j].Age95));
+      }
+      
+    }
+
+    if (dataset.label == "SDO"){
+      dataset.data = sdodata;
+    } else {
+      dataset.data = censusdata;
+    }
+    //dataset.data = censusdata;
+    //var total=Number(selectElemVal[0].total_basic_emp)-Number(selectElemVal[0].ib_emp);
+    /* var minval=0.01;
+    var otheremp=0;
+    var othertext = "*Other includes: ";
+    window.myLine.options.title.text = selectElem.options[selectElem.selectedIndex].text + " 5 Year Age Ranges";
+    lineChartData.labels = [];
+    dataset.backgroundColor = [];
+    dataset.data = selectElemVal;//[]; */
+    
+    //dataPercent = [];
+    
+    //Agriculture
+    /* if ((selectElemVal[0].agri_emp/total) > 0.40){
+    	if((selectElemVal[0].ag_prod_emp/total)>0){
+      	lineChartData.labels.push("Agriculture Production");
+    	  dataset.backgroundColor.push("#985282");
+    	  dataset.data.push(Number(selectElemVal[0].ag_prod_emp));
+    	  //dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
+    	}
+    	if((selectElemVal[0].ag_inputs_emp/total)>0){
+    	  lineChartData.labels.push("Agriculture Inputs");
+    	  dataset.backgroundColor.push("#AB5C92");
+    	  dataset.data.push(Number(selectElemVal[0].ag_inputs_emp));
+    	  //dataPercent.push(((selectElemVal[0].ag_inputs_emp/total)*100).toFixed(2));
+    	}
+    	if((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)>0){
+    	  lineChartData.labels.push("Agriculture Other");
+      	dataset.backgroundColor.push("#be66a2");
+    	  dataset.data.push(Number(selectElemVal[0].ag_proc_trade_emp) + Number(selectElemVal[0].ag_proc_emp));
+    	  //dataPercent.push((((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)/total)*100).toFixed(2));
+    	}
+    } else if ((selectElemVal[0].agri_emp/total) > minval){
+    	lineChartData.labels.push("Agriculture");
+    	dataset.backgroundColor.push("#be66a2");
+    	dataset.data.push(Number(selectElemVal[0].agri_emp));
+    	//dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
+    } else {
+      otheremp = otheremp + Number(selectElemVal[0].agri_emp);
+      othertext += "Agriculture, ";
+    }*/
+   
+
+  });
+  
+  window.myLine.update();
+});
+
+https://gis.dola.colorado.gov/lookups/sya_regions?reg_num=0&year=2020&choice=5yr
+
+function getData(fips) {
+  /* var url = "https://gis.dola.colorado.gov/lookups/sya?county="+fips+"&year=2020&choice=5yr";
+  if (fips = "0"){
+    console.log("True");
+    url = "https://gis.dola.colorado.gov/lookups/sya_regions?reg_num=0&year=2020&choice=5yr";
+  } */ 
+  var data = $.ajax({
+   url: "https://gis.dola.colorado.gov/lookups/sya?county="+fips+"&year=2020&choice=5yr",
+   dataType: 'json',
+   async: false,
+
+   });
+   
+  return data.responseJSON;
+ 
+}
+
+function getData2(){
+  var data = $.ajax({
+    url: "data/censusage.json",
+    dataType: 'json',
+    async: false,
+ 
+    });
+    return data.responseJSON;
+    //console.log("2nd " + data.responseJSON[1].county);
+}
+
+/* var lineChartData = {
+	labels: startlabels,
+	datasets: [{
+		label: 'Population',
+		backgroundColor: startcolors,
+		borderColor: window.chartColors.black,
+		borderWidth: .5,
+    fill: false,
+		data: startdata
+	}]
+	
+}; */
+		
+
+		
+
 
 function commafy(nStr) {
     var x, x1, x2, rgx;
