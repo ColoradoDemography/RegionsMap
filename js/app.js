@@ -26,8 +26,9 @@ function fetchJSONFile(path, callback) {
     httpRequest.send();
 }
 
-fetchJSONFile("https://gis.dola.colorado.gov/lookups/base-analysis?all=yes", init);
-
+//fetchJSONFile("https://gis.dola.colorado.gov/lookups/base-analysis?all=yes", init);
+fetchJSONFile("https://gis.dola.colorado.gov/lookups/sya?county=1,3,5,7,9,11,13,14,15,17,19,21,23,25,27,29,31,33,35,37,39,41,43,45,47,49,51,53,55,57,59,61,63,65,67,69,71,73,75,77,79,81,83,85,87,89,91,93,95,97,99,101,103,105,107,109,111,113,115,117,119,121,123,125&year=2020&choice=5yr", init);
+https://api.census.gov/data/2010/dec/sf1?get=H001001,NAME&for=state:*
 
 function init(data){
   
@@ -90,7 +91,7 @@ function init(data){
 	  
 	  var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 		var color = Chart.helpers.color;
-		var horizontalBarChartData = {
+		var lineChartData = {
 			labels: ['Transfer Payment', 'Agriculture', 'Manufacturing', 'Mining', 'Government', 'Regional Service', 'Tourism', 'Commuter', 'Other Household', 'Retiree'],
 			datasets: [{
 				label: 'Dataset 1',
@@ -147,9 +148,9 @@ function init(data){
 		window.onload = function() {
 			var ctx = document.getElementById('canvas').getContext('2d');
 
-			window.myHorizontalBar = new Chart(ctx, {
-				type: 'horizontalBar',
-				data: horizontalBarChartData,
+			window.myLine = new Chart(ctx, {
+				type: 'line',
+				data: lineChartData,
 				options: {
 					// Elements options apply to all of the options unless overridden in a dataset
 					// In this case, we are setting the border of each horizontal bar to be 2px wide

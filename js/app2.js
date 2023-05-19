@@ -1,49 +1,49 @@
 var selectElem = document.getElementById('sel');
 
 //change these to reflect Alamosa when making the annual update
-var startlabels = ['Agriculture', 'Government', 'Manufacturing', 'Other Household', 'Regional Service', 'Retiree', 'Tourism', 'Transfer Payment'];
+var startlabels = ['0 to 4', '5 to 9', '10 to 14', '15 to 19', '20 to 24', '25 to 29', '30 to 34', '35 to 39', '40 to 44', '45 to 49', '50 to 54', '55 to 59', '60 to 64', '65 to 69', '70 to 74', '75 to 79', '80 to 84', '85 to 89', '90 to 94', '95 to 99'];
 var startcolors = ["#be66a2", "#65a620", "#7b6888", "#546e91", "#bca44a", "#5b388f", "#e98125", "#961a1a"];
-var startdata = [992,1389,129,137,2078,695,756,436]; //Load Alamosa County manually for now
+var startdata = [992,1389,129,137,2078,695,756,436,0,0,992,1389,129,137,2078,695,756,436,0,0]; //Load Alamosa County manually for now
 
 selectElem.addEventListener('change', function() {
-  horizontalBarChartData.datasets.forEach(function(dataset) {
-    //console.log(selectElem.value);
+  lineChartData.datasets.forEach(function(dataset) {
+    console.log(selectElem.value);
     //if (selectElem.value > 200){selectElemV = selectElem.value.slice(-2)}else{selectElemV = selectElem.value};
     //console.log(selectElemV);
     selectElemVal = getData(selectElem.value);
-    //console.log(selectElemVal);
-    var total=Number(selectElemVal[0].total_basic_emp)-Number(selectElemVal[0].ib_emp);
+    console.log(selectElemVal);
+    //var total=Number(selectElemVal[0].total_basic_emp)-Number(selectElemVal[0].ib_emp);
     var minval=0.01;
     var otheremp=0;
     var othertext = "*Other includes: ";
-    window.myHorizontalBar.options.title.text = selectElem.options[selectElem.selectedIndex].text + " Base Industries, 2021";
-    horizontalBarChartData.labels = [];
+    window.myLine.options.title.text = selectElem.options[selectElem.selectedIndex].text + " 5 Year Age Ranges";
+    lineChartData.labels = [];
     dataset.backgroundColor = [];
     dataset.data = [];
     //dataPercent = [];
     
     //Agriculture
-    if ((selectElemVal[0].agri_emp/total) > 0.40){
+    /* if ((selectElemVal[0].agri_emp/total) > 0.40){
     	if((selectElemVal[0].ag_prod_emp/total)>0){
-      	horizontalBarChartData.labels.push("Agriculture Production");
+      	lineChartData.labels.push("Agriculture Production");
     	  dataset.backgroundColor.push("#985282");
     	  dataset.data.push(Number(selectElemVal[0].ag_prod_emp));
     	  //dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
     	}
     	if((selectElemVal[0].ag_inputs_emp/total)>0){
-    	  horizontalBarChartData.labels.push("Agriculture Inputs");
+    	  lineChartData.labels.push("Agriculture Inputs");
     	  dataset.backgroundColor.push("#AB5C92");
     	  dataset.data.push(Number(selectElemVal[0].ag_inputs_emp));
     	  //dataPercent.push(((selectElemVal[0].ag_inputs_emp/total)*100).toFixed(2));
     	}
     	if((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)>0){
-    	  horizontalBarChartData.labels.push("Agriculture Other");
+    	  lineChartData.labels.push("Agriculture Other");
       	dataset.backgroundColor.push("#be66a2");
     	  dataset.data.push(Number(selectElemVal[0].ag_proc_trade_emp) + Number(selectElemVal[0].ag_proc_emp));
     	  //dataPercent.push((((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)/total)*100).toFixed(2));
     	}
     } else if ((selectElemVal[0].agri_emp/total) > minval){
-    	horizontalBarChartData.labels.push("Agriculture");
+    	lineChartData.labels.push("Agriculture");
     	dataset.backgroundColor.push("#be66a2");
     	dataset.data.push(Number(selectElemVal[0].agri_emp));
     	//dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
@@ -53,7 +53,7 @@ selectElem.addEventListener('change', function() {
     }
     //Commuter
     if((selectElemVal[0].commuter_emp/total)>minval){
-      horizontalBarChartData.labels.push("Commuter");
+      lineChartData.labels.push("Commuter");
       dataset.backgroundColor.push("#a05d56");
       dataset.data.push(Number(selectElemVal[0].commuter_emp));
       //dataPercent.push(((selectElemVal[0].commuter_emp/total)*100).toFixed(2));
@@ -63,7 +63,7 @@ selectElem.addEventListener('change', function() {
     }
     //Government
     if((selectElemVal[0].govt_emp/total)>minval){
-      horizontalBarChartData.labels.push("Government");
+      lineChartData.labels.push("Government");
       dataset.backgroundColor.push("#65a620");
       dataset.data.push(Number(selectElemVal[0].govt_emp));
       //dataPercent.push(((selectElemVal[0].govt_emp/total)*100).toFixed(2));
@@ -73,7 +73,7 @@ selectElem.addEventListener('change', function() {
     }
     //Manufacturing
     if((selectElemVal[0].manuf_emp/total)>minval){
-      horizontalBarChartData.labels.push("Manufacturing");
+      lineChartData.labels.push("Manufacturing");
       dataset.backgroundColor.push("#7b6888");
       dataset.data.push(Number(selectElemVal[0].manuf_emp));
       //dataPercent.push(((selectElemVal[0].manuf_emp/total)*100).toFixed(2));
@@ -83,7 +83,7 @@ selectElem.addEventListener('change', function() {
     }
     //Mining
     if((selectElemVal[0].mining_emp/total)>minval){
-      horizontalBarChartData.labels.push("Mining");
+      lineChartData.labels.push("Mining");
       dataset.backgroundColor.push("#2484c1");
       dataset.data.push(Number(selectElemVal[0].mining_emp));
       //dataPercent.push(((selectElemVal[0].mining_emp/total)*100).toFixed(2));
@@ -93,7 +93,7 @@ selectElem.addEventListener('change', function() {
     }
      //Other Household
     if((selectElemVal[0].other_inc_emp/total)>minval){
-      horizontalBarChartData.labels.push("Other Household");
+      lineChartData.labels.push("Other Household");
       dataset.backgroundColor.push("#546e91");
       dataset.data.push(Number(selectElemVal[0].other_inc_emp));
       //dataPercent.push(((selectElemVal[0].other_inc_emp/total)*100).toFixed(2));
@@ -103,7 +103,7 @@ selectElem.addEventListener('change', function() {
     }
     //Regional Service
     if((selectElemVal[0].regl_serv_emp/total)>minval){
-      horizontalBarChartData.labels.push("Regional Service");
+      lineChartData.labels.push("Regional Service");
       dataset.backgroundColor.push("#bca44a");
       dataset.data.push(Number(selectElemVal[0].regl_serv_emp));
       //dataPercent.push(((selectElemVal[0].regl_serv_emp/total)*100).toFixed(2));
@@ -113,7 +113,7 @@ selectElem.addEventListener('change', function() {
     }
     //Retiree
     if((selectElemVal[0].retiree_emp/total)>minval){
-      horizontalBarChartData.labels.push("Retiree");
+      lineChartData.labels.push("Retiree");
       dataset.backgroundColor.push("#5b388f");
       dataset.data.push(Number(selectElemVal[0].retiree_emp));
       //dataPercent.push(((selectElemVal[0].retiree_emp/total)*100).toFixed(2));
@@ -124,25 +124,25 @@ selectElem.addEventListener('change', function() {
     //Tourism
     if ((selectElemVal[0].tourism_emp/total) > 0.40){
     	if((selectElemVal[0].resorts_emp/total)>0){
-    	  horizontalBarChartData.labels.push("Tourism: Resort");
+    	  lineChartData.labels.push("Tourism: Resort");
     	  dataset.backgroundColor.push("#BA671E");
     	  dataset.data.push(Number(selectElemVal[0].resorts_emp));
     	  //dataPercent.push(((selectElemVal[0].resorts_emp/total)*100).toFixed(2));
     	}
       if((selectElemVal[0].second_home_emp/total)>0){
-    	  horizontalBarChartData.labels.push("Tourism: 2nd Home");
+    	  lineChartData.labels.push("Tourism: 2nd Home");
     	  dataset.backgroundColor.push("#D27421");
     	  dataset.data.push(Number(selectElemVal[0].second_home_emp));
     	  //dataPercent.push(((selectElemVal[0].second_home_emp/total)*100).toFixed(2));
     	}
     	if((selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp)>0){
-    	  horizontalBarChartData.labels.push("Tourism: Other");
+    	  lineChartData.labels.push("Tourism: Other");
     	  dataset.backgroundColor.push("#e98125");
     	  dataset.data.pushNumber((selectElemVal[0].tour_serve_emp) + Number(selectElemVal[0].trans_emp));
     	  //dataPercent.push((((selectElemVal[0].tour_serve_emp + selectElemVal[0].trans_emp)/total)*100).toFixed(2));
     	}
     } else if ((selectElemVal[0].tourism_emp/total) > minval){
-      horizontalBarChartData.labels.push("Tourism");
+      lineChartData.labels.push("Tourism");
       dataset.backgroundColor.push("#e98125");
       dataset.data.push(Number(selectElemVal[0].tourism_emp));
       //dataPercent.push(((selectElemVal[0].tourism_emp/total)*100).toFixed(2));
@@ -153,7 +153,7 @@ selectElem.addEventListener('change', function() {
     
     //Transfer Payment
     if((selectElemVal[0].other_hhd_emp/total)>minval){  
-      horizontalBarChartData.labels.push("Transfer Payment");
+      lineChartData.labels.push("Transfer Payment");
       dataset.backgroundColor.push("#961a1a");
       dataset.data.push(Number(selectElemVal[0].other_hhd_emp));
       //dataPercent.push(((selectElemVal[0].other_hhd_emp/total)*100).toFixed(2));
@@ -163,7 +163,7 @@ selectElem.addEventListener('change', function() {
     }
     //Other
     if(otheremp>0){
-      horizontalBarChartData.labels.push("Other*");
+      lineChartData.labels.push("Other*");
       dataset.backgroundColor.push("black");
       dataset.data.push(Number(otheremp));
       //dataPercent.push(((otheremp/total)*100).toFixed(2));
@@ -172,40 +172,42 @@ selectElem.addEventListener('change', function() {
       console.log(othertext);
     } else {
       document.getElementById('other').innerHTML = '';
-    }
+    } */
 
   });
   
-  window.myHorizontalBar.update();
+  window.myLine.update();
 });
 
-
+https://gis.dola.colorado.gov/lookups/sya_regions?reg_num=0&year=2020&choice=5yr
 
 function getData(fips) {
-
-  if (fips > 200){
-    regnum = fips - 500;
-    fips = "reg"+regnum;
-    console.log(fips);
-  }
+  var url = "https://gis.dola.colorado.gov/lookups/sya?county="+fips+"&year=2020&choice=5yr";
+  if (fips = "0"){
+    console.log("True");
+    url = "https://gis.dola.colorado.gov/lookups/sya_regions?reg_num=0&year=2020&choice=5yr";
+  } 
+  console.log(url);
   var data = $.ajax({
-   url: "https://gis.dola.colorado.gov/lookups/base-analysis?county="+fips,
+   url: url,
    dataType: 'json',
    async: false,
 
    });
+   console.log(data.responseJSON);
   return data.responseJSON;
  
 }
 
 
-var horizontalBarChartData = {
+var lineChartData = {
 	labels: startlabels,
 	datasets: [{
-		label: 'Employees',
+		label: 'Population',
 		backgroundColor: startcolors,
 		borderColor: window.chartColors.black,
 		borderWidth: .5,
+    fill: false,
 		data: startdata
 	}]
 	
@@ -216,9 +218,9 @@ var horizontalBarChartData = {
 window.onload = function() {
 	var ctx = document.getElementById('canvas').getContext('2d');
 
-	window.myHorizontalBar = new Chart(ctx, {
-		type: 'horizontalBar',
-		data: horizontalBarChartData,
+	window.myLine = new Chart(ctx, {
+		type: 'line',
+		data: lineChartData,
 		options: {
 			// Elements options apply to all of the options unless overridden in a dataset
 			// In this case, we are setting the border of each horizontal bar to be 2px wide
@@ -233,7 +235,7 @@ window.onload = function() {
       //calculate the total of this data set
             var total = 0;
             for(var i in dataset.data) {
-              total += Math.round(dataset.data[i]); 
+              total += Math.round(dataset.totalpopulation[i]); 
             }
       //get the current items value
             var currentValue = dataset.data[tooltipItem.index];
@@ -241,7 +243,7 @@ window.onload = function() {
             var percentage = Math.floor(((currentValue/total) * 100)+0.5);
               label += ', ';
               label += percentage;
-              label += '% of direct base jobs in county';
+              label += '% of population in county';
               return label;
   			    },
 			    afterLabel: function(tooltipItem, data) {
@@ -255,54 +257,6 @@ window.onload = function() {
 			      switch (tooltipItem.yLabel) {
 			        case 'Transfer Payment':
 			          exp = 'Aka Public Assistance to those under 60.  Includes Medicaid, EITC, SNAP, & Unemployment Insurance compensation.';
-			          break;
-			        case 'Agriculture':
-			          exp = 'Activities related to and supporting agricultural production & processing.';
-			          break;
-			        case 'Agriculture Inputs':
-			          exp = 'Goods and services such as fertilizer, seeds or equipment used in agriculture production.';
-			          break;
-			        case 'Agriculture Production':
-			          exp = 'Raising crops and livestock for sale.';
-			          break;
-			        case 'Agriculture Other':
-			          exp = 'Activities that add value to ag products and prepares/transports them for market.';
-			          break;
-			        case 'Mining':
-			          exp = 'Mining operations and mining support.  Includes support activities for oil & gas drilling.';
-			          break;
-			        case 'Manufacturing':
-			          exp = 'Activities related to manufacturing, except agricultural processing.';
-			          break;
-			        case 'Government':
-			          exp = 'State & Federal government employment, including Higher Ed & military.';
-			          break;
-			        case 'Regional Service':
-			          exp = 'Provide services to surrounding region & the nation such as health care, computer systems design, architecture, and transportation.';
-			          break;
-			        case 'Tourism':
-			          exp = 'Activities related to tourism and industries that benefit from the spending of tourists and 2nd homeowners.';
-			          break;
-			        case 'Tourism: Resort':
-			          exp = 'Ski and summer resorts, National Parks, amusement parks, scenic railways and accommodations at hotels, VRBO and campgrounds.';
-			          break;
-			        case 'Tourism: 2nd Home':
-			          exp = 'The construction and upkeep of second homes and condominiums and fees paid to property management, maintenance, landscaping and cleaning services.';
-			          break;
-			        case 'Tourism: Other':
-			          exp = 'Other activities related to tourism and industries that benefit from the spending of tourists such as eating, drinking and transportation.';
-			          break;
-			        case 'Commuter':
-			          exp = 'Jobs in the local area that are supported by the earnings of commuters working outside the county or region.';
-			          break;
-			        case 'Retiree':
-			          exp = 'Employment associated with the spending of retirees fixed income or savings.  Includes social security, disability and Medicare expenditures.';
-			          break;
-			        case 'Other Household':
-			          exp = 'Jobs supported by unearned income: dividends, interest & rent.';
-			          break;
-			        case 'Other':
-			          exp = 'See footer for small industries listed as other.';
 			          break;
 			      }
 			      return ['',exp];
@@ -338,7 +292,7 @@ window.onload = function() {
 			},
 			title: {
 				display: true,
-				text: 'Alamosa Base Industries, 2021'
+				text: 'Age Comparison'
 			}
 		}
 	});

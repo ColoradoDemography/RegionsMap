@@ -1913,7 +1913,7 @@ defaults._set('bar', {
 	}
 });
 
-defaults._set('horizontalBar', {
+defaults._set('line', {
 	hover: {
 		mode: 'index',
 		axis: 'y'
@@ -2344,7 +2344,7 @@ module.exports = function(Chart) {
 		},
 	});
 
-	Chart.controllers.horizontalBar = Chart.controllers.bar.extend({
+	Chart.controllers.line = Chart.controllers.bar.extend({
 		/**
 		 * @private
 		 */

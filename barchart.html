@@ -37,7 +37,7 @@
 // 	<script>
 // 		var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 // 		var color = Chart.helpers.color;
-// 		var horizontalBarChartData = {
+// 		var lineChartData = {
 // 			labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 // 			datasets: [{
 // 				label: 'Dataset 1',
@@ -72,9 +72,9 @@
 // 		};
 // 		window.onload = function() {
 // 			var ctx = document.getElementById('canvas').getContext('2d');
-// 			window.myHorizontalBar = new Chart(ctx, {
-// 				type: 'horizontalBar',
-// 				data: horizontalBarChartData,
+// 			window.myLine = new Chart(ctx, {
+// 				type: 'line',
+// 				data: lineChartData,
 // 				options: {
 // 					// Elements options apply to all of the options unless overridden in a dataset
 // 					// In this case, we are setting the border of each horizontal bar to be 2px wide
@@ -96,49 +96,49 @@
 // 		};
 // 		document.getElementById('randomizeData').addEventListener('click', function() {
 // 			var zero = Math.random() < 0.2 ? true : false;
-// 			horizontalBarChartData.datasets.forEach(function(dataset) {
+// 			lineChartData.datasets.forEach(function(dataset) {
 // 				dataset.data = dataset.data.map(function() {
 // 					return zero ? 0.0 : randomScalingFactor();
 // 				});
 // 			});
-// 			window.myHorizontalBar.update();
+// 			window.myLine.update();
 // 		});
 // 		var colorNames = Object.keys(window.chartColors);
 // 		document.getElementById('addDataset').addEventListener('click', function() {
-// 			var colorName = colorNames[horizontalBarChartData.datasets.length % colorNames.length];
+// 			var colorName = colorNames[lineChartData.datasets.length % colorNames.length];
 // 			var dsColor = window.chartColors[colorName];
 // 			var newDataset = {
-// 				label: 'Dataset ' + (horizontalBarChartData.datasets.length + 1),
+// 				label: 'Dataset ' + (lineChartData.datasets.length + 1),
 // 				backgroundColor: color(dsColor).alpha(0.5).rgbString(),
 // 				borderColor: dsColor,
 // 				data: []
 // 			};
-// 			for (var index = 0; index < horizontalBarChartData.labels.length; ++index) {
+// 			for (var index = 0; index < lineChartData.labels.length; ++index) {
 // 				newDataset.data.push(randomScalingFactor());
 // 			}
-// 			horizontalBarChartData.datasets.push(newDataset);
-// 			window.myHorizontalBar.update();
+// 			lineChartData.datasets.push(newDataset);
+// 			window.myLine.update();
 // 		});
 // 		document.getElementById('addData').addEventListener('click', function() {
-// 			if (horizontalBarChartData.datasets.length > 0) {
-// 				var month = MONTHS[horizontalBarChartData.labels.length % MONTHS.length];
-// 				horizontalBarChartData.labels.push(month);
-// 				for (var index = 0; index < horizontalBarChartData.datasets.length; ++index) {
-// 					horizontalBarChartData.datasets[index].data.push(randomScalingFactor());
+// 			if (lineChartData.datasets.length > 0) {
+// 				var month = MONTHS[lineChartData.labels.length % MONTHS.length];
+// 				lineChartData.labels.push(month);
+// 				for (var index = 0; index < lineChartData.datasets.length; ++index) {
+// 					lineChartData.datasets[index].data.push(randomScalingFactor());
 // 				}
-// 				window.myHorizontalBar.update();
+// 				window.myLine.update();
 // 			}
 // 		});
 // 		document.getElementById('removeDataset').addEventListener('click', function() {
-// 			horizontalBarChartData.datasets.pop();
-// 			window.myHorizontalBar.update();
+// 			lineChartData.datasets.pop();
+// 			window.myLine.update();
 // 		});
 // 		document.getElementById('removeData').addEventListener('click', function() {
-// 			horizontalBarChartData.labels.splice(-1, 1); // remove the label first
-// 			horizontalBarChartData.datasets.forEach(function(dataset) {
+// 			lineChartData.labels.splice(-1, 1); // remove the label first
+// 			lineChartData.datasets.forEach(function(dataset) {
 // 				dataset.data.pop();
 // 			});
-// 			window.myHorizontalBar.update();
+// 			window.myLine.update();
 // 		});
 // 	</script>
 </body>
