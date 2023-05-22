@@ -1,4 +1,5 @@
 var selectElem = document.getElementById('sel');
+var selectElem2 = document.getElementById('sel2');
 
 //change these to reflect Alamosa when making the annual update
 var startlabels = ['0 to 4', '5 to 9', '10 to 14', '15 to 19', '20 to 24', '25 to 29', '30 to 34', '35 to 39', '40 to 44', '45 to 49', '50 to 54', '55 to 59', '60 to 64', '65 to 69', '70 to 74', '75 to 79', '80 to 84', '85 to 89', '90 to 94', '95 to 99'];
@@ -41,6 +42,7 @@ window.onload = function() {
     }
     
   }
+
 	window.myLine = new Chart(ctx, {
 		type: 'line',
 		//data: lineChartData,
@@ -48,11 +50,15 @@ window.onload = function() {
     data: {
       datasets:[{
         label: "SDO",
-        data: sdodata
+        data: sdodata,
+        fill: false,
+        borderColor: 'rgb(239,138,98)'
       },
       {
         label: "Census",
-        data: censusdata
+        data: censusdata,
+        fill: false,
+        borderColor: 'rgb(103,169,207)'
       }
     ],
       labels: startlabels,
@@ -64,32 +70,24 @@ window.onload = function() {
 
 			tooltips: {
 			  callbacks: {
-			    label: function(tooltipItem, data) {
-            var label = data.datasets[tooltipItem.datasetIndex].label || '';
-            label += ': ';
-            label += commafy(Math.round(tooltipItem.xLabel));
-            var dataset = data.datasets[tooltipItem.datasetIndex];
-      //calculate the total of this data set
-            var total = 0;
-            for(var i in dataset.data) {
-              total += Math.round(dataset.totalpopulation[i]); 
+			    title: function(tooltipItem, data){
+            display: false
+          },
+          label: function(tooltipItem, data) {
+            if (selectElem2.value == 0){
+              var label = commafy(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]);
+            } else {
+              var label = formatAsPercentage(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index],2);
             }
-      //get the current items value
-            var currentValue = dataset.data[tooltipItem.index];
-      //calculate the precentage based on the total and current item, also this does a rough rounding to give a whole number
-            var percentage = Math.floor(((currentValue/total) * 100)+0.5);
-              label += ', ';
-              label += percentage;
-              label += '% of population in county';
-              return label;
+            return label;
   			    },
-			    afterLabel: function(tooltipItem, data) {
-			     // var sum = data.datasets.reduce((sum, dataset) => {
-        //   	  return sum + dataset.data[tooltipItem.index];
-        //     }, 0);
-        //     var percent = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] / sum * 100;
-        //     percent = percent.toFixed(2); // make a nice string
-        //     return data.datasets[tooltipItem.datasetIndex].label + ': ' + percent + '%';
+			    /* afterLabel: function(tooltipItem, data) {
+			      var sum = data.datasets.reduce((sum, dataset) => {
+           	  return sum + dataset.data[tooltipItem.index];
+             }, 0);
+             var percent = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index] / sum * 100;
+             percent = percent.toFixed(2); // make a nice string
+             return data.datasets[tooltipItem.datasetIndex].label + ': ' + percent + '%';
 			      var exp = '';
 			      switch (tooltipItem.yLabel) {
 			        case 'Transfer Payment':
@@ -97,23 +95,28 @@ window.onload = function() {
 			          break;
 			      }
 			      return ['',exp];
-			    }
+			    } */
 			  }
 			},  
 			scales: {
 			  yAxes: [{
 			    barPercentage: 1,
-			    categoryPercentage: 0.5
-			  }],
-			  xAxes: [{
-			    ticks: {
+			    categoryPercentage: 0.5,
+          ticks: {
 			      callback: function(value, index, values) {
-			        return commafy(value);
+              if (selectElem2.value == 0){
+			          return commafy(value);
+              } else{
+                return formatAsPercentage(value, 0);
+              }
 			      }
 			    },
+			  }],
+			  xAxes: [{
+			    
 			    scaleLabel: {
 			      display: true,
-			      labelString: 'Employees'
+			      labelString: 'Age Groups'
 			    }
 			  }]
 			},
@@ -124,7 +127,7 @@ window.onload = function() {
 			},
 			responsive: false,
 			legend: {
-				display: false,
+				display: true,
 				position: 'right',
 			},
 			title: {
@@ -136,108 +139,100 @@ window.onload = function() {
 			
 };
 
-selectElem.addEventListener('change', function() {
-  //var firstdata = getData(selectElem.value);
-  //var reloaddata = [];
-  //for (i in firstdata){
-  //  reloaddata.push(Number(firstdata[i].totalpopulation));
-  //}
-  //data = getData(selectElem.value);
-  myLine.data.datasets.forEach(dataset => {
-    //console.log(selectElem.value);
-    //if (selectElem.value > 200){selectElemV = selectElem.value.slice(-2)}else{selectElemV = selectElem.value};
-    //console.log(selectElemV);
+selectElem.addEventListener('change', handler, false);
+selectElem2.addEventListener('change', handler, false);
+
+//selectElem.addEventListener('change', function() {
+function handler(event){
+  myLine.data.datasets.forEach(dataset => { 
     selectElemVal = getData(selectElem.value);
     seconddata = getData2();
-    console.log(selectElemVal);
     var sdodata = [];
-    var censusdata = []
-    for (i in selectElemVal){
-      sdodata.push(Number(selectElemVal[i].totalpopulation));
-    }
-
-    //dataset.data = sdodata;
-
-    for (j in seconddata){
-      if (seconddata[j].countyfips == selectElem.value){
-        censusdata.push(Number(seconddata[j].Age0));
-        censusdata.push(Number(seconddata[j].Age5));
-        censusdata.push(Number(seconddata[j].Age10));
-        censusdata.push(Number(seconddata[j].Age15));
-        censusdata.push(Number(seconddata[j].Age20));
-        censusdata.push(Number(seconddata[j].Age25));
-        censusdata.push(Number(seconddata[j].Age30));
-        censusdata.push(Number(seconddata[j].Age35));
-        censusdata.push(Number(seconddata[j].Age40));
-        censusdata.push(Number(seconddata[j].Age45));
-        censusdata.push(Number(seconddata[j].Age50));
-        censusdata.push(Number(seconddata[j].Age55));
-        censusdata.push(Number(seconddata[j].Age60));
-        censusdata.push(Number(seconddata[j].Age65));
-        censusdata.push(Number(seconddata[j].Age70));
-        censusdata.push(Number(seconddata[j].Age75));
-        censusdata.push(Number(seconddata[j].Age80));
-        censusdata.push(Number(seconddata[j].Age85));
-        censusdata.push(Number(seconddata[j].Age90));
-        censusdata.push(Number(seconddata[j].Age95));
+    var censusdata = [];
+    if (selectElem2.value == "0"){
+      for (i in selectElemVal){
+        sdodata.push(Number(selectElemVal[i].totalpopulation));
       }
-      
+
+      for (j in seconddata){
+        if (seconddata[j].countyfips == selectElem.value){
+          censusdata.push(Number(seconddata[j].Age0));
+          censusdata.push(Number(seconddata[j].Age5));
+          censusdata.push(Number(seconddata[j].Age10));
+          censusdata.push(Number(seconddata[j].Age15));
+          censusdata.push(Number(seconddata[j].Age20));
+          censusdata.push(Number(seconddata[j].Age25));
+          censusdata.push(Number(seconddata[j].Age30));
+          censusdata.push(Number(seconddata[j].Age35));
+          censusdata.push(Number(seconddata[j].Age40));
+          censusdata.push(Number(seconddata[j].Age45));
+          censusdata.push(Number(seconddata[j].Age50));
+          censusdata.push(Number(seconddata[j].Age55));
+          censusdata.push(Number(seconddata[j].Age60));
+          censusdata.push(Number(seconddata[j].Age65));
+          censusdata.push(Number(seconddata[j].Age70));
+          censusdata.push(Number(seconddata[j].Age75));
+          censusdata.push(Number(seconddata[j].Age80));
+          censusdata.push(Number(seconddata[j].Age85));
+          censusdata.push(Number(seconddata[j].Age90));
+          censusdata.push(Number(seconddata[j].Age95));
+        }   
+      }
+    } else {
+      var sdototalpop = 0;
+      var censustotalpop = 0;
+      var tempsdo = [];
+      var tempcensus = [];
+      for (i in selectElemVal){
+        tempsdo.push(Number(selectElemVal[i].totalpopulation));
+        sdototalpop += Number(selectElemVal[i].totalpopulation);
+      }
+      for (i in tempsdo){
+        sdodata.push((tempsdo[i]/sdototalpop*100));
+      }
+      for (j in seconddata){
+        if (seconddata[j].countyfips == selectElem.value){
+          tempcensus.push(Number(seconddata[j].Age0));
+          tempcensus.push(Number(seconddata[j].Age5));
+          tempcensus.push(Number(seconddata[j].Age10));
+          tempcensus.push(Number(seconddata[j].Age15));
+          tempcensus.push(Number(seconddata[j].Age20));
+          tempcensus.push(Number(seconddata[j].Age25));
+          tempcensus.push(Number(seconddata[j].Age30));
+          tempcensus.push(Number(seconddata[j].Age35));
+          tempcensus.push(Number(seconddata[j].Age40));
+          tempcensus.push(Number(seconddata[j].Age45));
+          tempcensus.push(Number(seconddata[j].Age50));
+          tempcensus.push(Number(seconddata[j].Age55));
+          tempcensus.push(Number(seconddata[j].Age60));
+          tempcensus.push(Number(seconddata[j].Age65));
+          tempcensus.push(Number(seconddata[j].Age70));
+          tempcensus.push(Number(seconddata[j].Age75));
+          tempcensus.push(Number(seconddata[j].Age80));
+          tempcensus.push(Number(seconddata[j].Age85));
+          tempcensus.push(Number(seconddata[j].Age90));
+          tempcensus.push(Number(seconddata[j].Age95));
+        }   
+      }
+      for (j in tempcensus){
+        censustotalpop += tempcensus[j];
+      }
+      for (j in tempcensus){
+        console.log(censustotalpop);
+        censusdata.push((tempcensus[j]/censustotalpop*100));
+      }
     }
 
     if (dataset.label == "SDO"){
       dataset.data = sdodata;
     } else {
       dataset.data = censusdata;
-    }
-    //dataset.data = censusdata;
-    //var total=Number(selectElemVal[0].total_basic_emp)-Number(selectElemVal[0].ib_emp);
-    /* var minval=0.01;
-    var otheremp=0;
-    var othertext = "*Other includes: ";
-    window.myLine.options.title.text = selectElem.options[selectElem.selectedIndex].text + " 5 Year Age Ranges";
-    lineChartData.labels = [];
-    dataset.backgroundColor = [];
-    dataset.data = selectElemVal;//[]; */
-    
-    //dataPercent = [];
-    
-    //Agriculture
-    /* if ((selectElemVal[0].agri_emp/total) > 0.40){
-    	if((selectElemVal[0].ag_prod_emp/total)>0){
-      	lineChartData.labels.push("Agriculture Production");
-    	  dataset.backgroundColor.push("#985282");
-    	  dataset.data.push(Number(selectElemVal[0].ag_prod_emp));
-    	  //dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
-    	}
-    	if((selectElemVal[0].ag_inputs_emp/total)>0){
-    	  lineChartData.labels.push("Agriculture Inputs");
-    	  dataset.backgroundColor.push("#AB5C92");
-    	  dataset.data.push(Number(selectElemVal[0].ag_inputs_emp));
-    	  //dataPercent.push(((selectElemVal[0].ag_inputs_emp/total)*100).toFixed(2));
-    	}
-    	if((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)>0){
-    	  lineChartData.labels.push("Agriculture Other");
-      	dataset.backgroundColor.push("#be66a2");
-    	  dataset.data.push(Number(selectElemVal[0].ag_proc_trade_emp) + Number(selectElemVal[0].ag_proc_emp));
-    	  //dataPercent.push((((selectElemVal[0].ag_proc_trade_emp + selectElemVal[0].ag_proc_emp)/total)*100).toFixed(2));
-    	}
-    } else if ((selectElemVal[0].agri_emp/total) > minval){
-    	lineChartData.labels.push("Agriculture");
-    	dataset.backgroundColor.push("#be66a2");
-    	dataset.data.push(Number(selectElemVal[0].agri_emp));
-    	//dataPercent.push(((selectElemVal[0].ag_prod_emp/total)*100).toFixed(2));
-    } else {
-      otheremp = otheremp + Number(selectElemVal[0].agri_emp);
-      othertext += "Agriculture, ";
-    }*/
-   
-
+    } 
   });
   
   window.myLine.update();
-});
+};
 
-https://gis.dola.colorado.gov/lookups/sya_regions?reg_num=0&year=2020&choice=5yr
 
 function getData(fips) {
   /* var url = "https://gis.dola.colorado.gov/lookups/sya?county="+fips+"&year=2020&choice=5yr";
@@ -266,22 +261,6 @@ function getData2(){
     return data.responseJSON;
     //console.log("2nd " + data.responseJSON[1].county);
 }
-
-/* var lineChartData = {
-	labels: startlabels,
-	datasets: [{
-		label: 'Population',
-		backgroundColor: startcolors,
-		borderColor: window.chartColors.black,
-		borderWidth: .5,
-    fill: false,
-		data: startdata
-	}]
-	
-}; */
-		
-
-		
 
 
 function commafy(nStr) {
@@ -324,4 +303,12 @@ function alphanum(a, b) {
     }
   }
   return aa.length - bb.length;
+}
+
+function formatAsPercentage(num, decimal) {
+  return new Intl.NumberFormat('default', {
+    style: 'percent',
+    minimumFractionDigits: decimal,
+    maximumFractionDigits: decimal,
+  }).format(num / 100);
 }
