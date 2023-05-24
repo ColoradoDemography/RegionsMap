@@ -49,17 +49,17 @@ window.onload = function() {
     
     data: {
       datasets:[{
-        label: "SDO",
+        label: selectElem.label,//"Colorado",
         data: sdodata,
         fill: false,
         borderColor: 'rgb(239,138,98)'
-      },
+      }/* ,
       {
         label: "Census",
         data: censusdata,
         fill: false,
         borderColor: 'rgb(103,169,207)'
-      }
+      } */
     ],
       labels: startlabels,
     },
@@ -312,3 +312,29 @@ function formatAsPercentage(num, decimal) {
     maximumFractionDigits: decimal,
   }).format(num / 100);
 }
+
+const actions = [
+  {
+    name: 'Add Dataset',
+    handler(chart) {
+      const data = chart.data;
+      const dsColor = Utils.namedColor(chart.data.datasets.length);
+      const newDataset = {
+        label: 'Dataset ' + (data.datasets.length + 1),
+        backgroundColor: dsColor,
+        borderColor: dsColor,
+        fill: true,
+        data: Utils.numbers({count: data.labels.length, min: -100, max: 100}),
+      };
+      chart.data.datasets.push(newDataset);
+      chart.update();
+    }
+  },
+  {
+    name: 'Remove Dataset',
+    handler(chart) {
+      chart.data.datasets.pop();
+      chart.update();
+    }
+  }
+];
