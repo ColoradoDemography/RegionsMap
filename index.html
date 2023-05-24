@@ -6,6 +6,10 @@
 	<script src="js/Chart.js"></script>
 	<script src="js/utils.js"></script>
 	<script src="js/saveSvgAsPng.js"></script>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/css/bootstrap-multiselect.css" />
+	
+
 	<style>
 	canvas {
 		-moz-user-select: none;
@@ -16,10 +20,10 @@
 </head>
 
 <body>
-	<div class="ui-widget">Counties: 
-	  <br />
+	<div style="margin-left: 5px;""> 
+	  <br /><label>Counties:
 	  <select multiple id="sel">
-		<option value="0" >Colorado</option>
+		<option value="0" selected>Colorado</option>
 		<option value="1" >Adams County</option>
 		<option value="3" >Alamosa County</option>
 		<option value="5" >Arapahoe County</option>
@@ -84,22 +88,37 @@
 	    <option value="121" >Washington County</option>
 	    <option value="123" >Weld County</option>
 	    <option value="125" >Yuma County</option>
-	  </select>
-	</div>
-	<br>
-	<div class="ui-widget">Statistic: 
+	  </select></label>
+	  <label>Statistic: 
 		<select id="sel2">
 			<option value="0" >Total Population</option>
 			<option value="1" >% of Population</option>
-		</select>
+		</select></label>
+		<label>Source: 
+			<select id="sel3">
+				<option value="0" >2021 SDO Estimates</option>
+				<option value="1" >2020 Census Population</option>
+			</select></label>
 	</div>
 	<br>
-	<div class="ui-widget">Source: 
+	<div style="margin-left: 5px;">
+	<button id="drawbtn" type="button">
+		Draw Chart
+	</button>
+	</div>
+	<!-- <div class="ui-widget"><label>Statistic: 
+		<select id="sel2">
+			<option value="0" >Total Population</option>
+			<option value="1" >% of Population</option>
+		</select></label>
+	</div>
+	<br>
+	<div class="ui-widget"><label>Source: 
 		<select id="sel3">
 			<option value="0" >2021 SDO Estimates</option>
 			<option value="1" >2020 Census Population</option>
-		</select>
-	</div>
+		</select></label>
+	</div> -->
 
 	<div id="container" style="width: 100%; height: 100%" >
 		<canvas id="canvas" width="800" height="400">
@@ -112,8 +131,12 @@
 	<!--<div id="exportdiv">-->
  <!--       <button type="button" id="t_download" class="btn" onclick="saveSvgAsPng(document.getElementsByTagName('ctx')[0], 'diagram.png');" tabindex="8" accesskey="i">Download PNG</button>-->
  <!--   </div>-->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
+
 	<script src="js/app2.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
 
 </body>
 
