@@ -1,6 +1,6 @@
 var selectElemCounty = document.getElementById('sel');
 var selectElemSource = document.getElementById('sel2');
-var selectElemState = document.getElementById('sel3');
+var selectElemStat = document.getElementById('sel3');
 var drawElement = document.getElementById('drawbtn');
 
 $('select[multiple]').multiselect()
@@ -13,39 +13,14 @@ var startdata = [992,1389,129,137,2078,695,756,436,0,0,992,1389,129,137,2078,695
 window.onload = function() {
 	var ctx = document.getElementById('canvas').getContext('2d');
   var firstdata = getData("0");
-  var seconddata = getData2();
+  //var seconddata = getData2();
   
   var sdodata = [];
-  var censusdata = [];
+  //var censusdata = [];
   for (i in firstdata){
     sdodata.push(Number(firstdata[i].totalpopulation));
   }
-  //console.log(sdodata);
-  for (j in seconddata){
-    if (seconddata[j].countyfips == 1){
-      censusdata.push(Number(seconddata[j].Age0));
-      censusdata.push(Number(seconddata[j].Age5));
-      censusdata.push(Number(seconddata[j].Age10));
-      censusdata.push(Number(seconddata[j].Age15));
-      censusdata.push(Number(seconddata[j].Age20));
-      censusdata.push(Number(seconddata[j].Age25));
-      censusdata.push(Number(seconddata[j].Age30));
-      censusdata.push(Number(seconddata[j].Age35));
-      censusdata.push(Number(seconddata[j].Age40));
-      censusdata.push(Number(seconddata[j].Age45));
-      censusdata.push(Number(seconddata[j].Age50));
-      censusdata.push(Number(seconddata[j].Age55));
-      censusdata.push(Number(seconddata[j].Age60));
-      censusdata.push(Number(seconddata[j].Age65));
-      censusdata.push(Number(seconddata[j].Age70));
-      censusdata.push(Number(seconddata[j].Age75));
-      censusdata.push(Number(seconddata[j].Age80));
-      censusdata.push(Number(seconddata[j].Age85));
-      censusdata.push(Number(seconddata[j].Age90));
-      censusdata.push(Number(seconddata[j].Age95));
-    }
-    
-  }
+ 
 
 	window.myLine = new Chart(ctx, {
 		type: 'line',
@@ -79,7 +54,7 @@ window.onload = function() {
             display: false
           },
           label: function(tooltipItem, data) {
-            if (selectElemSource.value == 0){
+            if (selectElemStat.value == 0){
               var label = commafy(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]);
             } else {
               var label = formatAsPercentage(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index],2);
@@ -94,7 +69,7 @@ window.onload = function() {
 			    categoryPercentage: 0.5,
           ticks: {
 			      callback: function(value, index, values) {
-              if (selectElemSource.value == 0){
+              if (selectElemStat.value == 0){
 			          return commafy(value);
               } else{
                 return formatAsPercentage(value, 0);
@@ -152,19 +127,46 @@ function handler(event){
       var sdodata = [];
       var censusdata = [];
       if (selectElemSource.value == "0"){
-        for (j in selectElemVal){
-          sdodata.push(Number(selectElemVal[j].totalpopulation));
-        }
-        const dsColor = getRandomColor();
-        const newDataset = {
-          label: selectElemVal[0].county,
-          backgroundColor: dsColor,
-          borderColor: dsColor,
-          fill: false,
-          data: sdodata
-        }
-
-        myLine.data.datasets.push(newDataset);//sdodata);
+        if (selectElemStat.value == "0"){
+          for (j in selectElemVal){
+            sdodata.push(Number(selectElemVal[j].totalpopulation));
+          }
+          //const dsColor = getRandomColor();
+          const newDataset = {
+            label: selectElemVal[0].county,
+            backgroundColor: colorList[i],
+            borderColor: colorList[i],
+            fill: false,
+            data: sdodata
+          }
+          console.log("Push");
+          myLine.data.datasets.push(newDataset);
+        } else { console.log("1");
+          var sdototalpop = 0;
+          var censustotalpop = 0;
+          var tempsdo = [];
+          var tempcensus = [];
+          for (j in selectElemVal){
+            tempsdo.push(Number(selectElemVal[j].totalpopulation));
+            sdototalpop += Number(selectElemVal[j].totalpopulation);
+          }
+          console.log("tempsdo: " + tempsdo); console.log("sdototalpop " + sdototalpop);
+          for (k in tempsdo){
+            sdodata.push((tempsdo[k]/sdototalpop*100));
+          }
+        
+          //const dsColor = getRandomColor();
+          const newDataset = {
+            label: selectElemVal[0].county,
+            backgroundColor: colorList[i],
+            borderColor: colorList[i],
+            fill: false,
+            data: sdodata
+          }
+          console.log("Push");
+          myLine.data.datasets.push(newDataset);
+      }
+        //sdodata);
         //myLine.data.datasets[i].data.push(sdodata);
         /* for (j in seconddata){
           if (seconddata[j].countyfips == selectElemCountyvalue){
@@ -191,6 +193,7 @@ function handler(event){
           }   
         } */
       } else {
+      if (selectElemStat.value == "0"){
         for (j in seconddata){
           if (seconddata[j].countyfips == selectedValues[i]){
             censusdata.push(Number(seconddata[j].Age0));
@@ -215,30 +218,24 @@ function handler(event){
             censusdata.push(Number(seconddata[j].Age95));
           }
         }   
-        
-        const dsColor = getRandomColor();
+
+        //const dsColor = getRandomColor();
         const newDataset = {
-          label: selectElemVal[0].name,
-          backgroundColor: dsColor,
-          borderColor: dsColor,
+          label: selectElemVal[0].county,
+          backgroundColor: colorList[i],
+          borderColor: colorList[i],
           fill: false,
           data: censusdata
         }
-
+        console.log("Push");
         myLine.data.datasets.push(newDataset)
-        /* var sdototalpop = 0;
+      }
+       else{
+        
         var censustotalpop = 0;
-        var tempsdo = [];
         var tempcensus = [];
-        for (i in selectElemVal){
-          tempsdo.push(Number(selectElemVal[i].totalpopulation));
-          sdototalpop += Number(selectElemVal[i].totalpopulation);
-        }
-        for (i in tempsdo){
-          sdodata.push((tempsdo[i]/sdototalpop*100));
-        } */
-        /* for (j in seconddata){
-          if (seconddata[j].countyfips == selectElemCountyvalue){
+        for (j in seconddata){
+          if (seconddata[j].countyfips == selectedValues[i]){
             tempcensus.push(Number(seconddata[j].Age0));
             tempcensus.push(Number(seconddata[j].Age5));
             tempcensus.push(Number(seconddata[j].Age10));
@@ -267,15 +264,26 @@ function handler(event){
         for (j in tempcensus){
           console.log(censustotalpop);
           censusdata.push((tempcensus[j]/censustotalpop*100));
-        } */
-      }
+        }
+
+        //const dsColor = getRandomColor();
+        const newDataset = {
+          label: selectElemVal[0].county,
+          backgroundColor: colorList[i],
+          borderColor: colorList[i],
+          fill: false,
+          data: censusdata
+        }
+console.log("Push");
+        myLine.data.datasets.push(newDataset)
+      
     }
-    
+  }
     //myLine.data.datasets.push(chartDatasets);
     //dataset.data = sdodata;
-    
+    }
   });
-  console.log(myLine.data.datasets);
+  //console.log(myLine.data.datasets);
   window.myLine.update();
 };
 
@@ -383,28 +391,4 @@ function getRandomColor() {
   return color;
 }
 
-const actions = [
-  {
-    name: 'Add Dataset',
-    handler(chart) {
-      const data = chart.data;
-      const dsColor = Utils.namedColor(chart.data.datasets.length);
-      const newDataset = {
-        label: 'Dataset ' + (data.datasets.length + 1),
-        backgroundColor: dsColor,
-        borderColor: dsColor,
-        fill: true,
-        data: Utils.numbers({count: data.labels.length, min: -100, max: 100}),
-      };
-      chart.data.datasets.push(newDataset);
-      chart.update();
-    }
-  },
-  {
-    name: 'Remove Dataset',
-    handler(chart) {
-      chart.data.datasets.pop();
-      chart.update();
-    }
-  }
-];
+const colorList = ['#a50026','#313695','#f46d43','#74add1','#fee090','#f1b6da','#6a3d9a','#ff7f00','#b2df8a','#cab2d6'];
