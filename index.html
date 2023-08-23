@@ -3,6 +3,12 @@
 
 <head>
 	<title>Multi County Age Line Chart</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+	 <script src="https://cdn.plot.ly/plotly-2.24.1.min.js" charset="utf-8"></script>
+	 <link type="text/css" rel="stylesheet" href="./css/common.css" async=""> 
 	<script src="js/Chart.js"></script>
 	<script src="js/utils.js"></script>
 	<script src="js/saveSvgAsPng.js"></script>
@@ -29,6 +35,22 @@
 </head>
 
 <body>
+	<a class="skip-main" href="#main">Skip to main content</a>
+	
+	<div>
+		<a href="https://cdola.colorado.gov/"><img class="logoSDO" src="./img/SDO-1600x400.jpg" alt="Department of Local Affairs Homepage"></a>
+	</div>
+		<div w3-include-html="./html/navheader.html"></div>
+	<!-- First Grid, linked images -->
+	<div class="grid-container2">
+		<div class="grid-item panel2_1_1">
+			<div w3-include-html="./html/sdotitle.html"></div>
+		</div>
+		<div class="grid-item app-panel_2_1" id="leftHand">
+			<div w3-include-html="./html/left_hand_index.html"></div>
+		</div> 
+	   
+	<div class="grid-item app-panel_2_2" id="main" tabindex="-1"> 
 	<div style="margin-left: 5px;"> 
 	  <br />
 	  <p>Select choices from dropdown and then hit the Draw Chart button to reflect your selections. Drawing can take a moment.</p>
@@ -111,41 +133,37 @@
 			<option value="1" >% of Population</option>
 		</select></label>
 		<button id="drawbtn" type="button">
-			Draw Chart
+			Redraw Chart
 		</button>
 	</div>
 	
+	<div class="dropdown AClass">
+		<button class="dropbtn"  id="estimate"><i class="fas fas fa-download fa-2x" style='color: black;'></i></button>
+		<div class="dropdown-content">
+		  <ul class='dd-list'>
+			<li><a href='https://storage.googleapis.com/co-publicdata/sya-county.csv' id='est_csv'>Download the SDO Data</a></li>
+			<li><a href='https://data.census.gov' id='est_census'>Download the Census Data</a></li>
+			<li><a href='#' id='downloadPNG' download="Age by County.png">Download Image (PNG)</a></li>
+		  </ul>
+		</div>
+	</div>
 	
-	<!-- <div style="margin-left: 5px;">
-	<button id="drawbtn" type="button">
-		Draw Chart
-	</button>
-	</div>
-	<div class="ui-widget"><label>Statistic: 
-		<select id="sel2">
-			<option value="0" >Total Population</option>
-			<option value="1" >% of Population</option>
-		</select></label>
-	</div>
-	<br>
-	<div class="ui-widget"><label>Source: 
-		<select id="sel3">
-			<option value="0" >2021 SDO Estimates</option>
-			<option value="1" >2020 Census Population</option>
-		</select></label>
-	</div> -->
 
 	<div id="container" style="width: 100%; height: 100%" >
 		<canvas id="canvas" width="800" height="400">
             <p>Your Browser Does Not Support Canvas</p>
         </canvas>
 	</div>
-	<div id="other">
-		<p></p> <!-- change based on initial county -->
-	</div>
+</div>
+</div>
+
+	<!-- <div id="other">
+		<p></p> change based on initial county 
+	</div> -->
 	<!--<div id="exportdiv">-->
  <!--       <button type="button" id="t_download" class="btn" onclick="saveSvgAsPng(document.getElementsByTagName('ctx')[0], 'diagram.png');" tabindex="8" accesskey="i">Download PNG</button>-->
  <!--   </div>-->
+ <script>includeHTML();</script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
