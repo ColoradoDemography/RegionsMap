@@ -4,6 +4,11 @@ var selectElemStat = document.getElementById('sel3');
 var drawElement = document.getElementById('drawbtn');
 var srcCanvas = document.getElementById('canvas');
 
+//Data urls
+var bea_url = "https://gis.dola.colorado.gov/lookups/bea_jobs?county="
+var mig_url = "https://gis.dola.colorado.gov/lookups/components?vars=netmigration&year=1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021&county="
+var mig_reg_url = "https://gis.dola.colorado.gov/lookups/components_region?vars=netmigration&year=1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021&reg_num="
+
 //function to create a white background for the canvas and convert to a png
 function dlCanvas(){
   destinationCanvas = document.createElement("canvas");
@@ -23,25 +28,29 @@ function dlCanvas(){
 };
 downloadPNG.addEventListener('click', dlCanvas, false);
 
-$('select[multiple]').multiselect()
+//$('select[multiple]').multiselect()
 
 //change these to reflect Alamosa when making the annual update
-var startlabels = var startlabels = ['1985','','','','','1990','','','','','2000','','','','','2005','','','','','2010','','','','','2015','','','','','2020','2021'];
+var startlabels = ['1985','','','','','1990','','','','','2000','','','','','2005','','','','','2010','','','','','2015','','','','','2020','2021'];
 var startcolors = ["#be66a2", "#65a620", "#7b6888", "#546e91", "#bca44a", "#5b388f", "#e98125", "#961a1a"];
 var startdata = [992,1389,129,137,2078,695,756,436,0,0,992,1389,129,137,2078,695,756,436,0,0]; //Load Alamosa County manually for now
+const jobyears = ['jobs_1985','jobs_1986','jobs_1987','jobs_1988','jobs_1989','jobs_1990','jobs_1991','jobs_1992','jobs_1993','jobs_1994','jobs_1995','jobs_1996','jobs_1997','jobs_1998','jobs_1999','jobs_2000',
+'jobs_2001','jobs_2002','jobs_2003','jobs_2004','jobs_2005','jobs_2006','jobs_2007','jobs_2008','jobs_2009','jobs_2010','jobs_2011','jobs_2012','jobs_2013','jobs_2014','jobs_2015','jobs_2016','jobs_2017','jobs_2018','jobs_2019','jobs_2020','jobs_2021']
 
 window.onload = function() {
 	var ctx = document.getElementById('canvas').getContext('2d');
-  var firstdata = getDataJobs("0");
+  var firstdata = getDataJobs("0"); console.log(firstdata);
   var seconddata = getDataCountyMig("0");
   var thirddata = getDataRegionMig("0");
   
   var jobsData = [];
   //var censusdata = [];
-  for (i in firstdata){
-    jobsData.push(Number(firstdata[i].totalpopulation));
+  for (i in firstdata[0]){console.log(i);
+    if (jobyears.indexOf(i) !== -1){
+      jobsData.push(Number(firstdata[0].i)); ///figure this out
+    }
   }
- 
+ console.log(jobsData);
 
 	window.myLine = new Chart(ctx, {
 		type: 'line',
@@ -117,7 +126,7 @@ window.onload = function() {
 			},
 			title: {
 				display: true,
-				text: 'Age Comparison'
+				text: 'Job Change and Net Migration'
 			}
 		}
 	});
