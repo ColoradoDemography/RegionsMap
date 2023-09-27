@@ -186,15 +186,12 @@ selectElemCounty.addEventListener('change', handler, false);
 //selectElemCountyaddEventListener('change', function() {
 function handler(event){
   var chartDatasets = [];
-  //var selectedValues = $('#sel').val();
-  console.log(myLine.data.datasets.length);
   
   myLine.data.datasets.forEach(dataset => { 
-    for (let d = 0; d < myLine.data.datasets.length; d++){
+    for (let d = 0; d <= myLine.data.datasets.length; d++){
       myLine.data.datasets.pop();
     }
-    //console.log(selectElemCounty.value);
-    
+    console.log(myLine.data.datasets);
     countyFips = selectElemCounty.value;
 
     firstdata = getDataJobs(countyFips);
@@ -255,28 +252,30 @@ function handler(event){
       for (i in seconddata){
         countyNetMigData.push(seconddata[i].netmig);
       }
-      console.log(countyNetMigData);
+      //console.log("SelectElemCounty " + selectElemCounty);
 
       const jobsDataset = {
-        label: selectElemCounty.label,
+        label: "Jobs",
         backgroundColor: colorList[i],
         borderColor: colorList[i],
         fill: false,
         data: jobsData
       }
-      console.log("Push");
+      //console.log("Push");
+      
       myLine.data.datasets.push(jobsDataset);
 
       const netMigDataset = {
-        label: selectElemCounty.label,
+        label: "Net Migration",
         backgroundColor: colorList[i],
         borderColor: colorList[i],
         fill: false,
         data: countyNetMigData
       }
-      console.log("Push");
+      //console.log("Push");
+      
       myLine.data.datasets.push(netMigDataset)
-
+  
  
     //myLine.data.datasets.push(chartDatasets);
     //dataset.data = jobsData;
