@@ -3,6 +3,7 @@ var selectElemSource = document.getElementById('sel2');
 var selectElemStat = document.getElementById('sel3');
 var drawElement = document.getElementById('drawbtn');
 var srcCanvas = document.getElementById('canvas');
+Chart.defaults.color = '#000';
 
 //Data urls
 var bea_url = "https://gis.dola.colorado.gov/lookups/bea_jobs?county="
@@ -39,37 +40,82 @@ const jobyears = ['jobs_1985','jobs_1986','jobs_1987','jobs_1988','jobs_1989','j
 
 window.onload = function() {
 	var ctx = document.getElementById('canvas').getContext('2d');
-  var firstdata = getDataJobs("0"); console.log(firstdata);
+  var firstdata = getDataJobs("0"); 
   var seconddata = getDataCountyMig("0");
   var thirddata = getDataRegionMig("0");
   
   var jobsData = [];
-  //var censusdata = [];
-  for (i in firstdata[0]){console.log(i);
-    if (jobyears.indexOf(i) !== -1){
-      jobsData.push(Number(firstdata[0].i)); ///figure this out
-    }
-  }
- console.log(jobsData);
+  var countyNetMigData = [];
 
+  jobsData.push(firstdata[0].jobs_1985 - firstdata[0].jobs_1984);
+  jobsData.push(firstdata[0].jobs_1986 - firstdata[0].jobs_1985);
+  jobsData.push(firstdata[0].jobs_1987 - firstdata[0].jobs_1986);
+  jobsData.push(firstdata[0].jobs_1988 - firstdata[0].jobs_1987);
+  jobsData.push(firstdata[0].jobs_1989 - firstdata[0].jobs_1988);
+  jobsData.push(firstdata[0].jobs_1990 - firstdata[0].jobs_1989);
+  jobsData.push(firstdata[0].jobs_1991 - firstdata[0].jobs_1990);
+  jobsData.push(firstdata[0].jobs_1992 - firstdata[0].jobs_1991);
+  jobsData.push(firstdata[0].jobs_1993 - firstdata[0].jobs_1992);
+  jobsData.push(firstdata[0].jobs_1994 - firstdata[0].jobs_1993);
+  jobsData.push(firstdata[0].jobs_1995 - firstdata[0].jobs_1994);
+  jobsData.push(firstdata[0].jobs_1996 - firstdata[0].jobs_1995);
+  jobsData.push(firstdata[0].jobs_1997 - firstdata[0].jobs_1996);
+  jobsData.push(firstdata[0].jobs_1998 - firstdata[0].jobs_1997);
+  jobsData.push(firstdata[0].jobs_1999 - firstdata[0].jobs_1998);
+  jobsData.push(firstdata[0].jobs_2000 - firstdata[0].jobs_1999);
+  jobsData.push(firstdata[0].jobs_2001 - firstdata[0].jobs_2000);
+  jobsData.push(firstdata[0].jobs_2002 - firstdata[0].jobs_2001);
+  jobsData.push(firstdata[0].jobs_2003 - firstdata[0].jobs_2002);
+  jobsData.push(firstdata[0].jobs_2004 - firstdata[0].jobs_2003);
+  jobsData.push(firstdata[0].jobs_2005 - firstdata[0].jobs_2004);
+  jobsData.push(firstdata[0].jobs_2006 - firstdata[0].jobs_2005);
+  jobsData.push(firstdata[0].jobs_2007 - firstdata[0].jobs_2006);
+  jobsData.push(firstdata[0].jobs_2008 - firstdata[0].jobs_2007);
+  jobsData.push(firstdata[0].jobs_2009 - firstdata[0].jobs_2008);
+  jobsData.push(firstdata[0].jobs_2010 - firstdata[0].jobs_2009);
+  jobsData.push(firstdata[0].jobs_2011 - firstdata[0].jobs_2010);
+  jobsData.push(firstdata[0].jobs_2012 - firstdata[0].jobs_2011);
+  jobsData.push(firstdata[0].jobs_2013 - firstdata[0].jobs_2012);
+  jobsData.push(firstdata[0].jobs_2014 - firstdata[0].jobs_2013);
+  jobsData.push(firstdata[0].jobs_2015 - firstdata[0].jobs_2014);
+  jobsData.push(firstdata[0].jobs_2016 - firstdata[0].jobs_2015);
+  jobsData.push(firstdata[0].jobs_2017 - firstdata[0].jobs_2016);
+  jobsData.push(firstdata[0].jobs_2018 - firstdata[0].jobs_2017);
+  jobsData.push(firstdata[0].jobs_2019 - firstdata[0].jobs_2018);
+  jobsData.push(firstdata[0].jobs_2020 - firstdata[0].jobs_2019);
+  jobsData.push(firstdata[0].jobs_2021 - firstdata[0].jobs_2020);
+console.log(jobsData);
+  /* for (i in firstdata[0]){
+    if (jobyears.indexOf(i) !== -1){
+      jobsData.push(Number(firstdata[0][i])); 
+    }
+  } */
+
+  for (j in seconddata){
+    countyNetMigData.push(Number(seconddata[j].netmig));
+  }
+  
+ 
 	window.myLine = new Chart(ctx, {
-		type: 'line',
+		//type: 'line',
 		//data: lineChartData,
     
     data: {
       datasets:[{
-        label: "Colorado",
+        type: 'bar',
+        label: "Job Change",
         data: jobsData,
         fill: false,
         backgroundColor: 'rgb(239,138,98)',
         borderColor: 'rgb(239,138,98)'
-      }/* ,
+      },
       {
-        label: "Census",
-        data: censusdata,
+        type: 'line',
+        label: "Net Migration",
+        data: countyNetMigData,
         fill: false,
         borderColor: 'rgb(103,169,207)'
-      } */
+      }
     ],
       labels: startlabels,
     },
@@ -84,11 +130,11 @@ window.onload = function() {
             display: false
           },
           label: function(tooltipItem, data) {
-            if (selectElemStat.value == 0){
+            //if (selectElemStat.value == 0){
               var label = commafy(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]);
-            } else {
-              var label = formatAsPercentage(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index],2);
-            }
+            //} else {
+            //  var label = formatAsPercentage(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index],2);
+            //}
             return label;
   			    },
 			  }
@@ -99,18 +145,18 @@ window.onload = function() {
 			    categoryPercentage: 0.5,
           ticks: {
 			      callback: function(value, index, values) {
-              if (selectElemStat.value == 0){
+              //if (selectElemStat.value == 0){
 			          return commafy(value);
-              } else{
-                return formatAsPercentage(value, 0);
-              }
+              //} else{
+              //  return formatAsPercentage(value, 0);
+              //}
 			      }
 			    },
 			  }],
 			  xAxes: [{
 			    scaleLabel: {
 			      display: true,
-			      labelString: 'Age Groups'
+			      labelString: 'Year'
 			    }
 			  }]
 			},
@@ -133,185 +179,108 @@ window.onload = function() {
 			
 };
 
-//selectElemCounty.addEventListener('change', handler, false);
+selectElemCounty.addEventListener('change', handler, false);
 //selectElemSource.addEventListener('change', handler, false);
-drawElement.addEventListener("click", handler);
+//drawElement.addEventListener("click", handler);
 
 //selectElemCountyaddEventListener('change', function() {
 function handler(event){
   var chartDatasets = [];
-  var selectedValues = $('#sel').val();
-  
+  //var selectedValues = $('#sel').val();
+  console.log(myLine.data.datasets.length);
   
   myLine.data.datasets.forEach(dataset => { 
-    for (let d = 0; d < myLine.data.datasets.length; i++){
+    for (let d = 0; d < myLine.data.datasets.length; d++){
       myLine.data.datasets.pop();
     }
     //console.log(selectElemCounty.value);
     
-    //console.log(selectElemVal);
-    seconddata = getDataCounty();
-    for (let i = 0; i < selectedValues.length; i++){
-      selectElemVal = getData(selectedValues[i]);
+    countyFips = selectElemCounty.value;
+
+    firstdata = getDataJobs(countyFips);
+
+    if (Number(selectElemCounty.value) > 125){
+      seconddata = getDataRegionMig(countyFips);
+    } else {
+      seconddata = getDataCountyMig(countyFips);
+    }
+    console.log(seconddata);
+    
+        //seconddata = getDataCounty();
+    //for (let i = 0; i < selectedValues.length; i++){
+      selectElemVal = getDataJobs(selectElemCounty.label);
       
       var jobsData = [];
-      var censusdata = [];
-      if (selectElemSource.value == "0"){
-        if (selectElemStat.value == "0"){
-          for (j in selectElemVal){
-            jobsData.push(Number(selectElemVal[j].totalpopulation));
-          }
-          //const dsColor = getRandomColor();
-          const newDataset = {
-            label: selectElemVal[0].county,
-            backgroundColor: colorList[i],
-            borderColor: colorList[i],
-            fill: false,
-            data: jobsData
-          }
-          console.log("Push");
-          myLine.data.datasets.push(newDataset);
-        } else { console.log("1");
-          var sdototalpop = 0;
-          var censustotalpop = 0;
-          var tempsdo = [];
-          var tempcensus = [];
-          for (j in selectElemVal){
-            tempsdo.push(Number(selectElemVal[j].totalpopulation));
-            sdototalpop += Number(selectElemVal[j].totalpopulation);
-          }
-          console.log("tempsdo: " + tempsdo); console.log("sdototalpop " + sdototalpop);
-          for (k in tempsdo){
-            jobsData.push((tempsdo[k]/sdototalpop*100));
-          }
-        
-          //const dsColor = getRandomColor();
-          const newDataset = {
-            label: selectElemVal[0].county,
-            backgroundColor: colorList[i],
-            borderColor: colorList[i],
-            fill: false,
-            data: jobsData
-          }
-          console.log("Push");
-          myLine.data.datasets.push(newDataset);
-      }
-        //jobsData);
-        //myLine.data.datasets[i].data.push(jobsData);
-        /* for (j in seconddata){
-          if (seconddata[j].countyfips == selectElemCountyvalue){
-            censusdata.push(Number(seconddata[j].Age0));
-            censusdata.push(Number(seconddata[j].Age5));
-            censusdata.push(Number(seconddata[j].Age10));
-            censusdata.push(Number(seconddata[j].Age15));
-            censusdata.push(Number(seconddata[j].Age20));
-            censusdata.push(Number(seconddata[j].Age25));
-            censusdata.push(Number(seconddata[j].Age30));
-            censusdata.push(Number(seconddata[j].Age35));
-            censusdata.push(Number(seconddata[j].Age40));
-            censusdata.push(Number(seconddata[j].Age45));
-            censusdata.push(Number(seconddata[j].Age50));
-            censusdata.push(Number(seconddata[j].Age55));
-            censusdata.push(Number(seconddata[j].Age60));
-            censusdata.push(Number(seconddata[j].Age65));
-            censusdata.push(Number(seconddata[j].Age70));
-            censusdata.push(Number(seconddata[j].Age75));
-            censusdata.push(Number(seconddata[j].Age80));
-            censusdata.push(Number(seconddata[j].Age85));
-            censusdata.push(Number(seconddata[j].Age90));
-            censusdata.push(Number(seconddata[j].Age95));
-          }   
-        } */
-      } else {
-      if (selectElemStat.value == "0"){
-        for (j in seconddata){
-          if (seconddata[j].countyfips == selectedValues[i]){
-            censusdata.push(Number(seconddata[j].Age0));
-            censusdata.push(Number(seconddata[j].Age5));
-            censusdata.push(Number(seconddata[j].Age10));
-            censusdata.push(Number(seconddata[j].Age15));
-            censusdata.push(Number(seconddata[j].Age20));
-            censusdata.push(Number(seconddata[j].Age25));
-            censusdata.push(Number(seconddata[j].Age30));
-            censusdata.push(Number(seconddata[j].Age35));
-            censusdata.push(Number(seconddata[j].Age40));
-            censusdata.push(Number(seconddata[j].Age45));
-            censusdata.push(Number(seconddata[j].Age50));
-            censusdata.push(Number(seconddata[j].Age55));
-            censusdata.push(Number(seconddata[j].Age60));
-            censusdata.push(Number(seconddata[j].Age65));
-            censusdata.push(Number(seconddata[j].Age70));
-            censusdata.push(Number(seconddata[j].Age75));
-            censusdata.push(Number(seconddata[j].Age80));
-            censusdata.push(Number(seconddata[j].Age85));
-            censusdata.push(Number(seconddata[j].Age90));
-            censusdata.push(Number(seconddata[j].Age95));
-          }
-        }   
+      var countyNetMigData = [];
 
-        //const dsColor = getRandomColor();
-        const newDataset = {
-          label: selectElemVal[0].county,
-          backgroundColor: colorList[i],
-          borderColor: colorList[i],
-          fill: false,
-          data: censusdata
-        }
-        console.log("Push");
-        myLine.data.datasets.push(newDataset)
-      }
-       else{
-        
-        var censustotalpop = 0;
-        var tempcensus = [];
-        for (j in seconddata){
-          if (seconddata[j].countyfips == selectedValues[i]){
-            tempcensus.push(Number(seconddata[j].Age0));
-            tempcensus.push(Number(seconddata[j].Age5));
-            tempcensus.push(Number(seconddata[j].Age10));
-            tempcensus.push(Number(seconddata[j].Age15));
-            tempcensus.push(Number(seconddata[j].Age20));
-            tempcensus.push(Number(seconddata[j].Age25));
-            tempcensus.push(Number(seconddata[j].Age30));
-            tempcensus.push(Number(seconddata[j].Age35));
-            tempcensus.push(Number(seconddata[j].Age40));
-            tempcensus.push(Number(seconddata[j].Age45));
-            tempcensus.push(Number(seconddata[j].Age50));
-            tempcensus.push(Number(seconddata[j].Age55));
-            tempcensus.push(Number(seconddata[j].Age60));
-            tempcensus.push(Number(seconddata[j].Age65));
-            tempcensus.push(Number(seconddata[j].Age70));
-            tempcensus.push(Number(seconddata[j].Age75));
-            tempcensus.push(Number(seconddata[j].Age80));
-            tempcensus.push(Number(seconddata[j].Age85));
-            tempcensus.push(Number(seconddata[j].Age90));
-            tempcensus.push(Number(seconddata[j].Age95));
-          }   
-        }
-        for (j in tempcensus){
-          censustotalpop += tempcensus[j];
-        }
-        for (j in tempcensus){
-          console.log(censustotalpop);
-          censusdata.push((tempcensus[j]/censustotalpop*100));
-        }
+      jobsData.push(firstdata[0].jobs_1985 - firstdata[0].jobs_1984);
+      jobsData.push(firstdata[0].jobs_1986 - firstdata[0].jobs_1985);
+      jobsData.push(firstdata[0].jobs_1987 - firstdata[0].jobs_1986);
+      jobsData.push(firstdata[0].jobs_1988 - firstdata[0].jobs_1987);
+      jobsData.push(firstdata[0].jobs_1989 - firstdata[0].jobs_1988);
+      jobsData.push(firstdata[0].jobs_1990 - firstdata[0].jobs_1989);
+      jobsData.push(firstdata[0].jobs_1991 - firstdata[0].jobs_1990);
+      jobsData.push(firstdata[0].jobs_1992 - firstdata[0].jobs_1991);
+      jobsData.push(firstdata[0].jobs_1993 - firstdata[0].jobs_1992);
+      jobsData.push(firstdata[0].jobs_1994 - firstdata[0].jobs_1993);
+      jobsData.push(firstdata[0].jobs_1995 - firstdata[0].jobs_1994);
+      jobsData.push(firstdata[0].jobs_1996 - firstdata[0].jobs_1995);
+      jobsData.push(firstdata[0].jobs_1997 - firstdata[0].jobs_1996);
+      jobsData.push(firstdata[0].jobs_1998 - firstdata[0].jobs_1997);
+      jobsData.push(firstdata[0].jobs_1999 - firstdata[0].jobs_1998);
+      jobsData.push(firstdata[0].jobs_2000 - firstdata[0].jobs_1999);
+      jobsData.push(firstdata[0].jobs_2001 - firstdata[0].jobs_2000);
+      jobsData.push(firstdata[0].jobs_2002 - firstdata[0].jobs_2001);
+      jobsData.push(firstdata[0].jobs_2003 - firstdata[0].jobs_2002);
+      jobsData.push(firstdata[0].jobs_2004 - firstdata[0].jobs_2003);
+      jobsData.push(firstdata[0].jobs_2005 - firstdata[0].jobs_2004);
+      jobsData.push(firstdata[0].jobs_2006 - firstdata[0].jobs_2005);
+      jobsData.push(firstdata[0].jobs_2007 - firstdata[0].jobs_2006);
+      jobsData.push(firstdata[0].jobs_2008 - firstdata[0].jobs_2007);
+      jobsData.push(firstdata[0].jobs_2009 - firstdata[0].jobs_2008);
+      jobsData.push(firstdata[0].jobs_2010 - firstdata[0].jobs_2009);
+      jobsData.push(firstdata[0].jobs_2011 - firstdata[0].jobs_2010);
+      jobsData.push(firstdata[0].jobs_2012 - firstdata[0].jobs_2011);
+      jobsData.push(firstdata[0].jobs_2013 - firstdata[0].jobs_2012);
+      jobsData.push(firstdata[0].jobs_2014 - firstdata[0].jobs_2013);
+      jobsData.push(firstdata[0].jobs_2015 - firstdata[0].jobs_2014);
+      jobsData.push(firstdata[0].jobs_2016 - firstdata[0].jobs_2015);
+      jobsData.push(firstdata[0].jobs_2017 - firstdata[0].jobs_2016);
+      jobsData.push(firstdata[0].jobs_2018 - firstdata[0].jobs_2017);
+      jobsData.push(firstdata[0].jobs_2019 - firstdata[0].jobs_2018);
+      jobsData.push(firstdata[0].jobs_2020 - firstdata[0].jobs_2019);
+      jobsData.push(firstdata[0].jobs_2021 - firstdata[0].jobs_2020);
+      console.log(jobsData);
 
-        //const dsColor = getRandomColor();
-        const newDataset = {
-          label: selectElemVal[0].county,
-          backgroundColor: colorList[i],
-          borderColor: colorList[i],
-          fill: false,
-          data: censusdata
-        }
-console.log("Push");
-        myLine.data.datasets.push(newDataset)
-      
-    }
-  }
+      for (i in seconddata){
+        countyNetMigData.push(seconddata[i].netmig);
+      }
+      console.log(countyNetMigData);
+
+      const jobsDataset = {
+        label: selectElemCounty.label,
+        backgroundColor: colorList[i],
+        borderColor: colorList[i],
+        fill: false,
+        data: jobsData
+      }
+      console.log("Push");
+      myLine.data.datasets.push(jobsDataset);
+
+      const netMigDataset = {
+        label: selectElemCounty.label,
+        backgroundColor: colorList[i],
+        borderColor: colorList[i],
+        fill: false,
+        data: countyNetMigData
+      }
+      console.log("Push");
+      myLine.data.datasets.push(netMigDataset)
+
+ 
     //myLine.data.datasets.push(chartDatasets);
     //dataset.data = jobsData;
-    }
+    //}
   });
   //console.log(myLine.data.datasets);
   window.myLine.update();
