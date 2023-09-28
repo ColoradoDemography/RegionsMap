@@ -84,7 +84,7 @@ window.onload = function() {
   jobsData.push(firstdata[0].jobs_2019 - firstdata[0].jobs_2018);
   jobsData.push(firstdata[0].jobs_2020 - firstdata[0].jobs_2019);
   jobsData.push(firstdata[0].jobs_2021 - firstdata[0].jobs_2020);
-console.log(jobsData);
+
   /* for (i in firstdata[0]){
     if (jobyears.indexOf(i) !== -1){
       jobsData.push(Number(firstdata[0][i])); 
@@ -101,21 +101,24 @@ console.log(jobsData);
 		//data: lineChartData,
     
     data: {
-      datasets:[{
-        type: 'bar',
-        label: "Job Change",
-        data: jobsData,
-        fill: false,
-        backgroundColor: 'rgb(239,138,98)',
-        borderColor: 'rgb(239,138,98)'
-      },
-      {
-        type: 'line',
-        label: "Net Migration",
-        data: countyNetMigData,
-        fill: false,
-        borderColor: 'rgb(103,169,207)'
-      }
+      datasets:[
+        {
+          type: 'line',
+          label: "Net Migration",
+          data: countyNetMigData,
+          fill: false,
+          backgroundColor: 'rgb(43,131,186)',
+          borderColor: 'rgb(43,131,186)'
+        },
+        {
+          type: 'bar',
+          label: "Job Change",
+          data: jobsData,
+          fill: false,
+          backgroundColor: 'rgb(247,119,7)',
+          borderColor: 'rgb(247,119,7)'
+        }
+      
     ],
       labels: startlabels,
     },
@@ -140,7 +143,7 @@ console.log(jobsData);
 			  }
 			},  
 			scales: {
-			  yAxes: [{
+			  y: {
 			    barPercentage: 1,
 			    categoryPercentage: 0.5,
           ticks: {
@@ -152,24 +155,28 @@ console.log(jobsData);
               //}
 			      }
 			    },
-			  }],
-			  xAxes: [{
-			    scaleLabel: {
+			  },
+			  x: {
+			    title: {
 			      display: true,
-			      labelString: 'Year'
+			      text: 'Year'
 			    }
-			  }]
+			  }
 			},
 			elements: {
 				rectangle: {
-					borderWidth: 1,
-				}
+					borderWidth: 0
+				},
+        point: {
+          pointRadius: 4,
+          pointBackgroundColor: 'rgb(43,131,186)'
+        }
 			},
 			responsive: false,
 			legend: {
 				display: true,
-				position: 'right',
-			},
+				position: 'right'
+      },
 			title: {
 				display: true,
 				text: 'Job Change and Net Migration'
@@ -183,7 +190,7 @@ selectElemCounty.addEventListener('change', handler, false);
 //selectElemSource.addEventListener('change', handler, false);
 //drawElement.addEventListener("click", handler);
 
-//selectElemCountyaddEventListener('change', function() {
+//selectElemCounty.addEventListener('change', function() {
 function handler(event){
   var chartDatasets = [];
   
@@ -191,6 +198,7 @@ function handler(event){
     for (let d = 0; d <= myLine.data.datasets.length; d++){
       myLine.data.datasets.pop();
     }
+    
     console.log(myLine.data.datasets);
     countyFips = selectElemCounty.value;
 
@@ -254,10 +262,23 @@ function handler(event){
       }
       //console.log("SelectElemCounty " + selectElemCounty);
 
+      const netMigDataset = {
+        type: 'line',
+        label: "Net Migration",
+        backgroundColor: 'rgb(43,131,186)',
+        borderColor: 'rgb(43,131,186)',
+        fill: false,
+        data: countyNetMigData
+      }
+      //console.log("Push");
+      
+      myLine.data.datasets.push(netMigDataset)
+      
       const jobsDataset = {
+        type: 'bar',
         label: "Jobs",
-        backgroundColor: colorList[i],
-        borderColor: colorList[i],
+        backgroundColor: 'rgb(247,119,7)',
+        borderColor: 'rgb(247,119,7)',
         fill: false,
         data: jobsData
       }
@@ -265,23 +286,13 @@ function handler(event){
       
       myLine.data.datasets.push(jobsDataset);
 
-      const netMigDataset = {
-        label: "Net Migration",
-        backgroundColor: colorList[i],
-        borderColor: colorList[i],
-        fill: false,
-        data: countyNetMigData
-      }
-      //console.log("Push");
-      
-      myLine.data.datasets.push(netMigDataset)
-  
+       
  
     //myLine.data.datasets.push(chartDatasets);
     //dataset.data = jobsData;
     //}
   });
-  //console.log(myLine.data.datasets);
+  console.log(myLine.data.datasets);
   window.myLine.update();
 };
 
