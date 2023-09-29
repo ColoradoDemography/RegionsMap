@@ -199,13 +199,13 @@ function handler(event){
       myLine.data.datasets.pop();
     }
     
-    console.log(myLine.data.datasets);
+    //console.log(myLine.data.datasets);
     countyFips = selectElemCounty.value;
-
+console.log(countyFips);
     firstdata = getDataJobs(countyFips);
 
-    if (Number(selectElemCounty.value) > 125){
-      seconddata = getDataRegionMig(countyFips);
+    if (Number(countyFips) > 125){
+      seconddata = getDataRegionMig(countyFips-500);
     } else {
       seconddata = getDataCountyMig(countyFips);
     }
@@ -276,7 +276,7 @@ function handler(event){
       
       const jobsDataset = {
         type: 'bar',
-        label: "Jobs",
+        label: "Job Change",
         backgroundColor: 'rgb(247,119,7)',
         borderColor: 'rgb(247,119,7)',
         fill: false,
