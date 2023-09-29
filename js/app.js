@@ -32,7 +32,7 @@ downloadPNG.addEventListener('click', dlCanvas, false);
 //$('select[multiple]').multiselect()
 
 //change these to reflect Alamosa when making the annual update
-var startlabels = ['1985','','','','','1990','','','','','2000','','','','','2005','','','','','2010','','','','','2015','','','','','2020','2021'];
+var startlabels = ['1985','','','','','1990','','','','','1995','','','','','2000','','','','','2005','','','','','2010','','','','','2015','','','','','2020','2021'];
 var startcolors = ["#be66a2", "#65a620", "#7b6888", "#546e91", "#bca44a", "#5b388f", "#e98125", "#961a1a"];
 var startdata = [992,1389,129,137,2078,695,756,436,0,0,992,1389,129,137,2078,695,756,436,0,0]; //Load Alamosa County manually for now
 const jobyears = ['jobs_1985','jobs_1986','jobs_1987','jobs_1988','jobs_1989','jobs_1990','jobs_1991','jobs_1992','jobs_1993','jobs_1994','jobs_1995','jobs_1996','jobs_1997','jobs_1998','jobs_1999','jobs_2000',
@@ -40,6 +40,7 @@ const jobyears = ['jobs_1985','jobs_1986','jobs_1987','jobs_1988','jobs_1989','j
 
 window.onload = function() {
 	var ctx = document.getElementById('canvas').getContext('2d');
+  const date = d3.timeFormat("%B %d, %Y");
   var firstdata = getDataJobs("0"); 
   var seconddata = getDataCountyMig("0");
   var thirddata = getDataRegionMig("0");
@@ -117,9 +118,7 @@ window.onload = function() {
           fill: false,
           backgroundColor: 'rgb(247,119,7)',
           borderColor: 'rgb(247,119,7)'
-        }
-      
-    ],
+        }],
       labels: startlabels,
     },
 		options: {
@@ -165,7 +164,7 @@ window.onload = function() {
 			},
 			elements: {
 				rectangle: {
-					borderWidth: 0
+					borderWidth: 1
 				},
         point: {
           pointRadius: 4,
@@ -173,15 +172,26 @@ window.onload = function() {
         }
 			},
 			responsive: false,
-			legend: {
-				display: true,
-				position: 'right'
-      },
-			title: {
-				display: true,
-				text: 'Job Change and Net Migration'
-			}
-		}
+      tension: .3,
+      plugins:{
+        legend: {
+          display: true,
+          position: 'right'
+        },
+        title: {
+          display: true,
+          text: 'Job Change and Net Migration - ' + selectElemCounty.options[selectElemCounty.selectedIndex].innerHTML
+        },
+        subtitle: {
+          display: true,
+          text: 'US Bureau of Economic Analysis, Migration Data and Visualization by Colorado State Demography Office. Print date: '+date(new Date),
+          position: 'bottom',
+          font: {
+            size: 10
+          }
+        }
+      }
+    }
 	});
 			
 };
@@ -199,9 +209,8 @@ function handler(event){
       myLine.data.datasets.pop();
     }
     
-    //console.log(myLine.data.datasets);
-    countyFips = selectElemCounty.value;
-console.log(countyFips);
+        countyFips = selectElemCounty.value;
+
     firstdata = getDataJobs(countyFips);
 
     if (Number(countyFips) > 125){
@@ -209,10 +218,7 @@ console.log(countyFips);
     } else {
       seconddata = getDataCountyMig(countyFips);
     }
-    console.log(seconddata);
     
-        //seconddata = getDataCounty();
-    //for (let i = 0; i < selectedValues.length; i++){
       selectElemVal = getDataJobs(selectElemCounty.label);
       
       var jobsData = [];
@@ -260,8 +266,7 @@ console.log(countyFips);
       for (i in seconddata){
         countyNetMigData.push(seconddata[i].netmig);
       }
-      //console.log("SelectElemCounty " + selectElemCounty);
-
+  
       const netMigDataset = {
         type: 'line',
         label: "Net Migration",
@@ -270,8 +275,7 @@ console.log(countyFips);
         fill: false,
         data: countyNetMigData
       }
-      //console.log("Push");
-      
+           
       myLine.data.datasets.push(netMigDataset)
       
       const jobsDataset = {
@@ -282,15 +286,10 @@ console.log(countyFips);
         fill: false,
         data: jobsData
       }
-      //console.log("Push");
       
       myLine.data.datasets.push(jobsDataset);
+      myLine.options.plugins.title.text = 'Job Change and Net Migration - ' + selectElemCounty.options[selectElemCounty.selectedIndex].innerHTML;
 
-       
- 
-    //myLine.data.datasets.push(chartDatasets);
-    //dataset.data = jobsData;
-    //}
   });
   console.log(myLine.data.datasets);
   window.myLine.update();
