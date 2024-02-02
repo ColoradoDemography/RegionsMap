@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Jobs and Migration</title>
+	<title>Understanding Colorado Regions</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
@@ -53,10 +53,10 @@
 	<div class="grid-item app-panel_2_2"> 
 	<!--<div style="margin-left: 5px;"> 
 	  <br />-->
-	  <h1 class='h1_style' id="main" >Net Migration and Job Change Chart</h1>
+	  <h1 class='h1_style' id="main" >Understanding Colorado Regions</h1>
 	  <h2 class='h2_style'>INSTRUCTIONS:</h2>
 
-	  <p>Select choices from dropdown to see the change in jobs and net migration in the counties and regions of Colorado</p>
+	  <p>Select choices from dropdown to see the counties that compose various regions of Colorado</p>
 	  <p>
 		<b><i>This data visualization can only be viewed on a tablet or desktop.</i></b>
 	  </p>
@@ -64,7 +64,7 @@
 			<table class="lookup_tab" cellspacing="0" cellpadding="0">
 				<tr>
 					<td class="lookup_cll">
-						<label class="entry_text" for="sel" id="geo-lbl"  alt='Counties' aria-label='Counties'>Counties:</label> 
+						<label class="entry_text" for="countiesSelected" id="geo-lbl"  alt='Region' aria-label='Region'>Region:</label> 
 					</td>
 					<td class="lookup_cll">
 						
@@ -80,100 +80,35 @@
 
 	<tr>
 		<td class="lookup_cll">
-		<select id="sel" style="font-size:12px">
-			<option value="0" selected>Colorado</option>
-			<option value="1" >Adams County</option>
-			<option value="3" >Alamosa County</option>
-			<option value="5" >Arapahoe County</option>
-			<option value="7" >Archuleta County</option>
-			<option value="9" >Baca County</option>
-			<option value="11" >Bent County</option>
-			<option value="13" >Boulder County</option>
-			<option value="14" >Broomfield City & County</option>
-			<option value="15" >Chaffee County</option>
-			<option value="17" >Cheyenne County</option>
-			<option value="19" >Clear Creek County</option>
-			<option value="21" >Conejos County</option>
-			<option value="23" >Costilla County</option>
-			<option value="25" >Crowley County</option>
-			<option value="27" >Custer County</option>
-			<option value="29" >Delta County</option>
-			<option value="31" >Denver City & County</option>
-			<option value="33" >Dolores County</option>
-			<option value="35" >Douglas County</option>
-			<option value="37" >Eagle County</option>
-			<option value="39" >Elbert County</option>
-			<option value="41" >El Paso County</option>
-			<option value="43" >Fremont County</option>
-			<option value="45" >Garfield County</option>
-			<option value="47" >Gilpin County</option>
-			<option value="49" >Grand County</option>
-			<option value="51" >Gunnison County</option>
-			<option value="53" >Hinsdale County</option>
-			<option value="55" >Huerfano County</option>
-			<option value="57" >Jackson County</option>
-			<option value="59" >Jefferson County</option>
-			<option value="61" >Kiowa County</option>
-			<option value="63" >Kit Carson County</option>
-			<option value="65" >Lake County</option>
-			<option value="67" >La Plata County</option>
-			<option value="69" >Larimer County</option>
-			<option value="71" >Las Animas County</option>
-			<option value="73" >Lincoln County</option>
-			<option value="75" >Logan County</option>
-			<option value="77" >Mesa County</option>
-			<option value="79" >Mineral County</option>
-			<option value="81" >Moffat County</option>
-			<option value="83" >Montezuma County</option>
-			<option value="85" >Montrose County</option>
-			<option value="87" >Morgan County</option>
-			<option value="89" >Otero County</option>
-			<option value="91" >Ouray County</option>
-			<option value="93" >Park County</option>
-			<option value="95" >Phillips County</option>
-			<option value="97" >Pitkin County</option>
-			<option value="99" >Prowers County</option>
-			<option value="101" >Pueblo County</option>
-			<option value="103" >Rio Blanco County</option>
-			<option value="105" >Rio Grande County</option>
-			<option value="107" >Routt County</option>
-			<option value="109" >Saguache County</option>
-			<option value="111" >San Juan County</option>
-			<option value="113" >San Miguel County</option>
-			<option value="115" >Sedgwick County</option>
-			<option value="117" >Summit County</option>
-			<option value="119" >Teller County</option>
-			<option value="121" >Washington County</option>
-			<option value="123" >Weld County</option>
-			<option value="125" >Yuma County</option>
-			<option value="520" >Denver PMSA</option>
-			<option value="521" >Denver-Boulder Metro Area</option>
-			<option value="522" >Denver-Boulder-Greeley CMSA</option>
-			<option value="523" >10 County Denver Metro</option>
-			<option value="515" >Central Mountains</option>
-			<option value="516" >Eastern Plains</option>
-			<option value="517" >Front Range</option>
-			<option value="518" >San Luis Valley</option>
-			<option value="519" >Western Slope</option>
-			<option value="501" >Planning Region 1</option>
-			<option value="502" >Planning Region 2</option>
-			<option value="503" >Planning Region 3</option>
-			<option value="504" >Planning Region 4</option>
-			<option value="505" >Planning Region 5</option>
-			<option value="506" >Planning Region 6</option>
-			<option value="507" >Planning Region 7</option>
-			<option value="508" >Planning Region 8</option>
-			<option value="509" >Planning Region 9</option>
-			<option value="510" >Planning Region 10</option>
-			<option value="511" >Planning Region 11</option>
-			<option value="512" >Planning Region 12</option>
-			<option value="513" >Planning Region 13</option>
-			<option value="514" >Planning Region 14</option>
+		<select id="countiesSelected" class="formtable" name="countiesSelected">
+			<option value="20" selected>Denver PMSA</option>
+	<option value="21">Denver-Boulder Metro Area</option>
+	<option value="22">Denver-Boulder-Greeley CMSA</option>
+	<option value="23">10 County Denver Metro</option>
+	<option value="15">Central Mountains</option>
+	<option value="16">Eastern Plains</option>
+	<option value="17">Front Range</option>
+	<option value="18">San Luis Valley</option>
+	<option value="19">Western Slope</option>
+	<option value="1">Planning Region 1</option>
+	<option value="2">Planning Region 2</option>
+	<option value="3">Planning Region 3</option>
+	<option value="4">Planning Region 4</option>
+	<option value="5">Planning Region 5</option>
+	<option value="6">Planning Region 6</option>
+	<option value="7">Planning Region 7</option>
+	<option value="8">Planning Region 8</option>
+	<option value="9">Planning Region 9</option>
+	<option value="10">Planning Region 10</option>
+	<option value="11">Planning Region 11</option>
+	<option value="12">Planning Region 12</option>
+	<option value="13">Planning Region 13</option>
+	<option value="14">Planning Region 14</option>
 		</select>
 		</td>
 <!--<td></td><td></td><td></td>
 		</div>-->
-		<td class="lookup_cll">
+		<!-- <td class="lookup_cll">
 			<div class="dropdown AClass">
 				<button class="dropbtn"  id="estimate"><i class="fas fas fa-download fa-2x" style='color: black;'></i></button>
 				<div class="dropdown-content">
@@ -184,21 +119,38 @@
 				</ul>
 				</div>
 			</div>
-		</td>
+		</td> -->
 	</tr>					
 </table>
 
-	<div id="container" style="width: 100%; height: 100%" >
-		<canvas id="canvas" width="1000" height="500">
-            <p>Your Browser Does Not Support Canvas</p>
-        </canvas>
-	</div>
+<label class="entry_text" for="countylist" id="county-lbl"  alt='Counties in Region' aria-label='Counties in Region'>Counties in Region:</label> 
+<p id="countylist">&nbsp;</p>
+
+<div id="svgcontainer"></div>
+
+<!--this svg element contains information for making the shadow around the state -->
+<svg id="svgdefs" style="left: 0px; top: 0px;
+  position: relative;" width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<defs>
+    <filter id="dropshadow" height="130%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4"/>
+      <feOffset dx="3" dy="3" result="offsetblur"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+</svg>
+
 </div>
 </div>
 
 
  <script>includeHTML();</script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ <script src="https://d3js.org/d3.v3.min.js"></script>
+ <script src="https://d3js.org/d3.geo.projection.v0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.15/js/bootstrap-multiselect.min.js"></script>
 

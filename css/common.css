@@ -1346,7 +1346,7 @@ div.tooltip {
 
 .entry_text {
   font-family: "Trebuchet MS, Museo Slab; helvetica, lucida sans, tahoma, verdana", sans-serif;
-  font-size: 9pt;
+  font-size: 16pt;
   display : inline;
 }
 
@@ -1962,4 +1962,16 @@ a.skip-main:focus, a.skip-main:active {
     text-align:center;
     font-size:1.2em;
     z-index:999;
+}
+
+.place-label {
+  font-family: Cambria, Georgia;
+  font-size: 10pt;
+  font-weight: bold;
+  fill: #050505;
+  pointer-events: none;
+}
+
+.lrg {
+  font-weight: bold;
 }

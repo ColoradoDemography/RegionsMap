@@ -1,405 +1,286 @@
-var selectElemCounty = document.getElementById('sel');
-var selectElemSource = document.getElementById('sel2');
-var selectElemStat = document.getElementById('sel3');
-var drawElement = document.getElementById('drawbtn');
-var srcCanvas = document.getElementById('canvas');
-Chart.defaults.color = '#000';
+colors={};
+  colors.selected="rgb(237,248,177)";
+  colors.standard="rgb(166,206,227)";
 
-//Data urls
-var bea_url = "https://gis.dola.colorado.gov/lookups/bea_jobs?county="
-var mig_url = "https://gis.dola.colorado.gov/lookups/components?vars=netmigration&year=1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021&county="
-var mig_reg_url = "https://gis.dola.colorado.gov/lookups/components_region?vars=netmigration&year=1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021&reg_num="
+    /*Width and height*/
+    var w = 700;
+    var h = 520;
 
-//function to create a white background for the canvas and convert to a png
-function dlCanvas(){
-  destinationCanvas = document.createElement("canvas");
-  destinationCanvas.width = srcCanvas.width;
-  destinationCanvas.height = srcCanvas.height;
+    /*projection specific to Colorado*/
+    var projection = d3.geo.transverseMercator()
+        .translate([(w / 2) - 10, (h / 2) - 15])
+        .scale(6500)
+        .rotate([105.63, -39.18, 0])
+        .center([0, 0]);
 
-  destCtx = destinationCanvas.getContext('2d');
+    /*Define path generator*/
+    var path = d3.geo.path()
+        .projection(projection);
 
-  //create a rectangle with the desired color
-  destCtx.fillStyle = "#FFFFFF";
-  destCtx.fillRect(0,0,srcCanvas.width,srcCanvas.height);
+    /*Create SVG element*/
+    var svg = d3.select("#svgcontainer")
+        .append("svg")
+        .attr("id", "statesvg")
+        .attr("width", w)
+        .attr("height", h);
 
-  //draw the original canvas onto the destination canvas
-  destCtx.drawImage(srcCanvas, 0, 0);
-  var dt = destinationCanvas.toDataURL('image/png');
-  this.href = dt.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-};
-downloadPNG.addEventListener('click', dlCanvas, false);
+    /*create group element, add map*/
+    var map = svg.append("svg:g")
+        .attr("id", "map")
+        .style("filter", "url(#dropshadow)"); /*adds shadow to the state from definition in svgdefs*/
 
-//$('select[multiple]').multiselect()
+    /*create group element for labels (created after map, so that it draws on top of map)*/
+    var labels = svg.append("svg:g")
+        .attr("id", "labels");
 
-//change these to reflect Alamosa when making the annual update
-var startlabels = ['1985','','','','','1990','','','','','1995','','','','','2000','','','','','2005','','','','','2010','','','','','2015','','','','','2020','2021'];
-var startcolors = ["#be66a2", "#65a620", "#7b6888", "#546e91", "#bca44a", "#5b388f", "#e98125", "#961a1a"];
-var startdata = [992,1389,129,137,2078,695,756,436,0,0,992,1389,129,137,2078,695,756,436,0,0]; //Load Alamosa County manually for now
-const jobyears = ['jobs_1985','jobs_1986','jobs_1987','jobs_1988','jobs_1989','jobs_1990','jobs_1991','jobs_1992','jobs_1993','jobs_1994','jobs_1995','jobs_1996','jobs_1997','jobs_1998','jobs_1999','jobs_2000',
-'jobs_2001','jobs_2002','jobs_2003','jobs_2004','jobs_2005','jobs_2006','jobs_2007','jobs_2008','jobs_2009','jobs_2010','jobs_2011','jobs_2012','jobs_2013','jobs_2014','jobs_2015','jobs_2016','jobs_2017','jobs_2018','jobs_2019','jobs_2020','jobs_2021']
 
-window.onload = function() {
-	var ctx = document.getElementById('canvas').getContext('2d');
-  const date = d3.timeFormat("%B %d, %Y");
-  var firstdata = getDataJobs("0"); 
-  var seconddata = getDataCountyMig("0");
-  var thirddata = getDataRegionMig("0");
-  
-  var jobsData = [];
-  var countyNetMigData = [];
+    /*Load in GeoJSON data*/
+    d3.json("/geojson/County.geojson", function(json) {
 
-  jobsData.push(firstdata[0].jobs_1985 - firstdata[0].jobs_1984);
-  jobsData.push(firstdata[0].jobs_1986 - firstdata[0].jobs_1985);
-  jobsData.push(firstdata[0].jobs_1987 - firstdata[0].jobs_1986);
-  jobsData.push(firstdata[0].jobs_1988 - firstdata[0].jobs_1987);
-  jobsData.push(firstdata[0].jobs_1989 - firstdata[0].jobs_1988);
-  jobsData.push(firstdata[0].jobs_1990 - firstdata[0].jobs_1989);
-  jobsData.push(firstdata[0].jobs_1991 - firstdata[0].jobs_1990);
-  jobsData.push(firstdata[0].jobs_1992 - firstdata[0].jobs_1991);
-  jobsData.push(firstdata[0].jobs_1993 - firstdata[0].jobs_1992);
-  jobsData.push(firstdata[0].jobs_1994 - firstdata[0].jobs_1993);
-  jobsData.push(firstdata[0].jobs_1995 - firstdata[0].jobs_1994);
-  jobsData.push(firstdata[0].jobs_1996 - firstdata[0].jobs_1995);
-  jobsData.push(firstdata[0].jobs_1997 - firstdata[0].jobs_1996);
-  jobsData.push(firstdata[0].jobs_1998 - firstdata[0].jobs_1997);
-  jobsData.push(firstdata[0].jobs_1999 - firstdata[0].jobs_1998);
-  jobsData.push(firstdata[0].jobs_2000 - firstdata[0].jobs_1999);
-  jobsData.push(firstdata[0].jobs_2001 - firstdata[0].jobs_2000);
-  jobsData.push(firstdata[0].jobs_2002 - firstdata[0].jobs_2001);
-  jobsData.push(firstdata[0].jobs_2003 - firstdata[0].jobs_2002);
-  jobsData.push(firstdata[0].jobs_2004 - firstdata[0].jobs_2003);
-  jobsData.push(firstdata[0].jobs_2005 - firstdata[0].jobs_2004);
-  jobsData.push(firstdata[0].jobs_2006 - firstdata[0].jobs_2005);
-  jobsData.push(firstdata[0].jobs_2007 - firstdata[0].jobs_2006);
-  jobsData.push(firstdata[0].jobs_2008 - firstdata[0].jobs_2007);
-  jobsData.push(firstdata[0].jobs_2009 - firstdata[0].jobs_2008);
-  jobsData.push(firstdata[0].jobs_2010 - firstdata[0].jobs_2009);
-  jobsData.push(firstdata[0].jobs_2011 - firstdata[0].jobs_2010);
-  jobsData.push(firstdata[0].jobs_2012 - firstdata[0].jobs_2011);
-  jobsData.push(firstdata[0].jobs_2013 - firstdata[0].jobs_2012);
-  jobsData.push(firstdata[0].jobs_2014 - firstdata[0].jobs_2013);
-  jobsData.push(firstdata[0].jobs_2015 - firstdata[0].jobs_2014);
-  jobsData.push(firstdata[0].jobs_2016 - firstdata[0].jobs_2015);
-  jobsData.push(firstdata[0].jobs_2017 - firstdata[0].jobs_2016);
-  jobsData.push(firstdata[0].jobs_2018 - firstdata[0].jobs_2017);
-  jobsData.push(firstdata[0].jobs_2019 - firstdata[0].jobs_2018);
-  jobsData.push(firstdata[0].jobs_2020 - firstdata[0].jobs_2019);
-  jobsData.push(firstdata[0].jobs_2021 - firstdata[0].jobs_2020);
+        /*Bind data and create one path per GeoJSON feature*/
+        map.selectAll("path")
+            .data(json.features)
+            .enter()
+            .append("path")
+            .attr("d", path)
+            .style("stroke-dasharray", ("3, 3"))
+            .style("stroke-width", "0.5px")
+            .style("stroke", "rgb(150,150,150)")
+            .style("fill", colors.standard)
+            .classed("county", true);
 
-  /* for (i in firstdata[0]){
-    if (jobyears.indexOf(i) !== -1){
-      jobsData.push(Number(firstdata[0][i])); 
-    }
-  } */
+        /*add label for each feature*/
+        labels.selectAll("text")
+            .data(json.features)
+            .enter()
+            .append("text")
+            .attr("class", "place-label")
+            .attr("text-anchor", "middle")
+            .attr("text-rendering", "optimizeLegibility")
+            .text(function(d) {
+                return d.properties.NAME;
+            })
+            .attr("x", function(d) {
+                return projection([d.properties.x, d.properties.y])[0];
+            })
+            .attr("y", function(d) {
+                return projection([d.properties.x, d.properties.y])[1];
+            })
+            .attr("dy", function(d){ if(d.properties.NAME==="Broomfield") {return "-.7em"} });
 
-  for (j in seconddata){
-    countyNetMigData.push(Number(seconddata[j].netmig));
-  }
-  
- 
-	window.myLine = new Chart(ctx, {
-		//type: 'line',
-		//data: lineChartData,
-    
-    data: {
-      datasets:[
-        {
-          type: 'line',
-          label: "Net Migration",
-          data: countyNetMigData,
-          fill: false,
-          backgroundColor: 'rgb(43,131,186)',
-          borderColor: 'rgb(43,131,186)'
-        },
-        {
-          type: 'bar',
-          label: "Job Change",
-          data: jobsData,
-          fill: false,
-          backgroundColor: 'rgb(247,119,7)',
-          borderColor: 'rgb(247,119,7)'
-        }],
-      labels: startlabels,
-    },
-		options: {
+        var insertLinebreaks = function(d) {
+            var el = d3.select(this);
+            var words = d.properties.NAME.split('|');
+            el.text('');
 
-      // Elements options apply to all of the options unless overridden in a dataset
-			// In this case, we are setting the border of each horizontal bar to be 2px wide
+            for (var i = 0; i < words.length; i++) {
+                var tspan = el.append('tspan').text(words[i]);
+                if (i > 0)
+                    tspan.attr('x', projection([d.properties.x, d.properties.y])[0]).attr('dy', '10');
+            }
+        };
 
-			tooltips: {
-			  callbacks: {
-			    title: function(tooltipItem, data){
-            display: false
-          },
-          label: function(tooltipItem, data) {
-            //if (selectElemStat.value == 0){
-              var label = commafy(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index]);
-            //} else {
-            //  var label = formatAsPercentage(data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index],2);
-            //}
-            return label;
-  			    },
-			  }
-			},  
-			scales: {
-			  y: {
-			    barPercentage: 1,
-			    categoryPercentage: 0.5,
-          ticks: {
-			      callback: function(value, index, values) {
-              //if (selectElemStat.value == 0){
-			          return commafy(value);
-              //} else{
-              //  return formatAsPercentage(value, 0);
-              //}
-			      }
-			    },
-			  },
-			  x: {
-			    title: {
-			      display: true,
-			      text: 'Year'
-			    }
-			  }
-			},
-			elements: {
-				rectangle: {
-					borderWidth: 1
-				},
-        point: {
-          pointRadius: 4,
-          pointBackgroundColor: 'rgb(43,131,186)'
+        svg.selectAll('text').each(insertLinebreaks);
+
+    });
+
+    var viewresults = document.getElementById('countiesSelected');
+
+    viewresults.onclick = function() {
+        listnames();
+    };
+
+    function getSelectValues(select) {
+        var result = [];
+        var options = select && select.options;
+        var opt;
+
+        for (var i = 0, iLen = options.length; i < iLen; i++) {
+            opt = options[i];
+
+            if (opt.selected) {
+                result.push(opt.value || opt.text);
+            }
         }
-			},
-			responsive: false,
-      tension: .3,
-      plugins:{
-        legend: {
-          display: true,
-          position: 'right'
-        },
-        title: {
-          display: true,
-          text: 'Job Change and Net Migration - ' + selectElemCounty.options[selectElemCounty.selectedIndex].innerHTML
-        },
-        subtitle: {
-          display: true,
-          text: 'US Bureau of Economic Analysis, Migration Data and Visualization by Colorado State Demography Office. Print date: '+date(new Date),
-          position: 'bottom',
-          font: {
-            size: 10
-          }
+        return result;
+    }
+
+    function listnames() {
+        var selectedCounties = getSelectValues(countiesSelected);
+        var countylist = "";
+
+        switch (selectedCounties[0]) {
+            case "1":
+                countylist = "Logan, Morgan, Phillips, Sedgwick, Washington, Yuma";
+                break;
+            case "2":
+                countylist = "Larimer, Weld";
+                break;
+            case "3":
+                countylist = "Adams, Arapahoe, Boulder, Broomfield, Clear Creek, Denver, Douglas, Gilpin, Jefferson";
+                break;
+            case "4":
+                countylist = "El Paso, Park, Teller";
+                break;
+            case "5":
+                countylist = "Cheyenne, Elbert, Kit Carson, Lincoln";
+                break;
+            case "6":
+                countylist = "Baca, Bent, Crowley, Kiowa, Otero, Prowers";
+                break;
+            case "7":
+                countylist = "Pueblo";
+                break;
+            case "8":
+                countylist = "Alamosa, Conejos, Costilla, Mineral, Rio Grande, Saguache";
+                break;
+            case "9":
+                countylist = "Archuleta, Dolores, La Plata, Montezuma, San Juan";
+                break;
+            case "10":
+                countylist = "Delta, Gunnison, Hinsdale, Montrose, Ouray, San Miguel";
+                break;
+            case "11":
+                countylist = "Garfield, Mesa, Moffat, Rio Blanco";
+                break;
+            case "12":
+                countylist = "Eagle, Grand, Jackson, Pitkin, Routt, Summit";
+                break;
+            case "13":
+                countylist = "Chaffee, Custer, Fremont, Lake";
+                break;
+            case "14":
+                countylist = "Huerfano, Las Animas";
+                break;
+            case "15":
+                countylist = "Chaffee, Clear Creek, Custer, Fremont, Gilpin, Huerfano, Lake, Las Animas, Park";
+                break;
+            case "16":
+                countylist = "Baca, Bent, Cheyenne, Crowley, Elbert, Kiowa, Kit Carson, Lincoln, Logan, Morgan, Otero, Phillips, Prowers, Sedgwick, Washington, Yuma";
+                break;
+            case "17":
+                countylist = "Adams, Arapahoe, Boulder, Broomfield, Denver, Douglas, El Paso, Jefferson, Larimer, Pueblo, Teller, Weld";
+                break;
+            case "18":
+                countylist = "Alamosa, Conejos, Costilla, Mineral, Rio Grande, Saguache";
+                break;
+            case "19":
+                countylist = "Archuleta, Delta, Dolores, Eagle, Garfield, Grand, Gunnison, Hinsdale, Jackson, La Plata, Mesa, Moffat, Montezuma, Montrose, Ouray, Pitkin, Rio, Blanco, Routt, San Juan, San Miguel, Summit";
+                break;
+            case "20":
+                countylist = "Adams, Arapahoe, Broomfield, Denver, Douglas, Jefferson";
+                break;
+            case "21":
+                countylist = "Adams, Arapahoe, Boulder, Broomfield, Denver, Douglas, Jefferson";
+                break;
+            case "22":
+                countylist = "Adams, Arapahoe, Boulder, Broomfield, Denver, Douglas, Jefferson, Weld";
+                break;
+            case "23":
+                countylist = "Adams, Arapahoe, Broomfield, Clear Creek, Denver, Douglas, Elbert, Gilpin, Jefferson, Park";
+                break;
         }
-      }
+
+        document.getElementById("countylist").innerHTML = countylist;
+
+
+
+        d3.selectAll(".county").style("fill", function(d) {
+            return colorcounties(d, selectedCounties[0]);
+        });
+
+
+
+
     }
-	});
-			
-};
 
-selectElemCounty.addEventListener('change', handler, false);
-//selectElemSource.addEventListener('change', handler, false);
-//drawElement.addEventListener("click", handler);
+    function colorcounties(county, region) {
+        var carray = get_region_array(region);
 
-//selectElemCounty.addEventListener('change', function() {
-function handler(event){
-  var chartDatasets = [];
-  
-  myLine.data.datasets.forEach(dataset => { 
-    for (let d = 0; d <= myLine.data.datasets.length; d++){
-      myLine.data.datasets.pop();
+        for (var i = 0; i < carray.length; i++) {
+            if (county.properties.GEOID === carray[i]) {
+                return colors.selected;
+            }
+        }
+
+        return colors.standard;
     }
-    
-        countyFips = selectElemCounty.value;
 
-    firstdata = getDataJobs(countyFips);
+    function get_region_array(region) {
+        if (region === "1") {
+            return ["08075", "08087", "08095", "08115", "08121", "08125"];
+        }
+        if (region === "2") {
+            return ["08069", "08123"];
+        }
+        if (region === "3") {
+            return ["08001", "08005", "08013", "08014", "08019", "08031", "08035", "08047", "08059"];
+        }
+        if (region === "4") {
+            return ["08041", "08093", "08119"];
+        }
+        if (region === "5") {
+            return ["08017", "08039", "08063", "08073"];
+        }
+        if (region === "6") {
+            return ["08009", "08011", "08025", "08061", "08089", "08099"];
+        }
+        if (region === "7") {
+            return ["08101"];
+        }
+        if (region === "8") {
+            return ["08003", "08021", "08023", "08079", "08105", "08109"];
+        }
+        if (region === "9") {
+            return ["08007", "08033", "08067", "08083", "08111"];
+        }
+        if (region === "10") {
+            return ["08029", "08051", "08053", "08085", "08091", "08113"];
+        }
+        if (region === "11") {
+            return ["08045", "08077", "08081", "08103"];
+        }
+        if (region === "12") {
+            return ["08037", "08049", "08057", "08097", "08107", "08117"];
+        }
+        if (region === "13") {
+            return ["08015", "08027", "08043", "08065"];
+        }
+        if (region === "14") {
+            return ["08055", "08071"];
+        }
+        if (region === "15") {
+            return ["08015", "08019", "08027", "08043", "08047", "08055", "08065", "08071", "08093"];
+        }
+        if (region === "16") {
+            return ["08009", "08011", "08017", "08025", "08039", "08061", "08063", "08073", "08075", "08087", "08089", "08095", "08099", "08115", "08121", "08125"];
+        }
+        if (region === "17") {
+            return ["08001", "08005", "08013", "08014", "08031", "08035", "08041", "08059", "08069", "08101", "08119", "08123"];
+        }
+        if (region === "18") {
+            return ["08003", "08021", "08023", "08079", "08105", "08109"];
+        }
+        if (region === "19") {
+            return ["08007", "08029", "08033", "08037", "08045", "08049", "08051", "08053", "08057", "08067", "08077", "08081", "08083", "08085", "08091", "08097", "08103", "08107", "08111", "08113", "08117"];
+        }
+        if (region === "20") {
+            return ["08001", "08005", "08014", "08031", "08035", "08059"];
+        }
+        if (region === "21") {
+            return ["08001", "08005", "08013", "08014", "08031", "08035", "08059"];
+        }
+        if (region === "22") {
+            return ["08001", "08005", "08013", "08014", "08031", "08035", "08059", "08123"];
+        }
+        if (region === "23") {
+            return ["08001", "08005", "08014", "08019", "08031", "08035", "08039", "08047", "08059", "08093"];
+        }
 
-    if (Number(countyFips) > 125){
-      seconddata = getDataRegionMig(countyFips-500);
-    } else {
-      seconddata = getDataCountyMig(countyFips);
+        return [];
     }
-    
-      selectElemVal = getDataJobs(selectElemCounty.label);
-      
-      var jobsData = [];
-      var countyNetMigData = [];
 
-      jobsData.push(firstdata[0].jobs_1985 - firstdata[0].jobs_1984);
-      jobsData.push(firstdata[0].jobs_1986 - firstdata[0].jobs_1985);
-      jobsData.push(firstdata[0].jobs_1987 - firstdata[0].jobs_1986);
-      jobsData.push(firstdata[0].jobs_1988 - firstdata[0].jobs_1987);
-      jobsData.push(firstdata[0].jobs_1989 - firstdata[0].jobs_1988);
-      jobsData.push(firstdata[0].jobs_1990 - firstdata[0].jobs_1989);
-      jobsData.push(firstdata[0].jobs_1991 - firstdata[0].jobs_1990);
-      jobsData.push(firstdata[0].jobs_1992 - firstdata[0].jobs_1991);
-      jobsData.push(firstdata[0].jobs_1993 - firstdata[0].jobs_1992);
-      jobsData.push(firstdata[0].jobs_1994 - firstdata[0].jobs_1993);
-      jobsData.push(firstdata[0].jobs_1995 - firstdata[0].jobs_1994);
-      jobsData.push(firstdata[0].jobs_1996 - firstdata[0].jobs_1995);
-      jobsData.push(firstdata[0].jobs_1997 - firstdata[0].jobs_1996);
-      jobsData.push(firstdata[0].jobs_1998 - firstdata[0].jobs_1997);
-      jobsData.push(firstdata[0].jobs_1999 - firstdata[0].jobs_1998);
-      jobsData.push(firstdata[0].jobs_2000 - firstdata[0].jobs_1999);
-      jobsData.push(firstdata[0].jobs_2001 - firstdata[0].jobs_2000);
-      jobsData.push(firstdata[0].jobs_2002 - firstdata[0].jobs_2001);
-      jobsData.push(firstdata[0].jobs_2003 - firstdata[0].jobs_2002);
-      jobsData.push(firstdata[0].jobs_2004 - firstdata[0].jobs_2003);
-      jobsData.push(firstdata[0].jobs_2005 - firstdata[0].jobs_2004);
-      jobsData.push(firstdata[0].jobs_2006 - firstdata[0].jobs_2005);
-      jobsData.push(firstdata[0].jobs_2007 - firstdata[0].jobs_2006);
-      jobsData.push(firstdata[0].jobs_2008 - firstdata[0].jobs_2007);
-      jobsData.push(firstdata[0].jobs_2009 - firstdata[0].jobs_2008);
-      jobsData.push(firstdata[0].jobs_2010 - firstdata[0].jobs_2009);
-      jobsData.push(firstdata[0].jobs_2011 - firstdata[0].jobs_2010);
-      jobsData.push(firstdata[0].jobs_2012 - firstdata[0].jobs_2011);
-      jobsData.push(firstdata[0].jobs_2013 - firstdata[0].jobs_2012);
-      jobsData.push(firstdata[0].jobs_2014 - firstdata[0].jobs_2013);
-      jobsData.push(firstdata[0].jobs_2015 - firstdata[0].jobs_2014);
-      jobsData.push(firstdata[0].jobs_2016 - firstdata[0].jobs_2015);
-      jobsData.push(firstdata[0].jobs_2017 - firstdata[0].jobs_2016);
-      jobsData.push(firstdata[0].jobs_2018 - firstdata[0].jobs_2017);
-      jobsData.push(firstdata[0].jobs_2019 - firstdata[0].jobs_2018);
-      jobsData.push(firstdata[0].jobs_2020 - firstdata[0].jobs_2019);
-      jobsData.push(firstdata[0].jobs_2021 - firstdata[0].jobs_2020);
-      console.log(jobsData);
-
-      for (i in seconddata){
-        countyNetMigData.push(seconddata[i].netmig);
-      }
-  
-      const netMigDataset = {
-        type: 'line',
-        label: "Net Migration",
-        backgroundColor: 'rgb(43,131,186)',
-        borderColor: 'rgb(43,131,186)',
-        fill: false,
-        data: countyNetMigData
-      }
-           
-      myLine.data.datasets.push(netMigDataset)
-      
-      const jobsDataset = {
-        type: 'bar',
-        label: "Job Change",
-        backgroundColor: 'rgb(247,119,7)',
-        borderColor: 'rgb(247,119,7)',
-        fill: false,
-        data: jobsData
-      }
-      
-      myLine.data.datasets.push(jobsDataset);
-      myLine.options.plugins.title.text = 'Job Change and Net Migration - ' + selectElemCounty.options[selectElemCounty.selectedIndex].innerHTML;
-
-  });
-  console.log(myLine.data.datasets);
-  window.myLine.update();
-};
-
-
-function getDataJobs(fips) {
- var data = $.ajax({
-   url: "https://gis.dola.colorado.gov/lookups/bea_jobs?county="+fips,
-   dataType: 'json',
-   async: false,
- });
-   
-  return data.responseJSON;
-}
-
-function getDataCountyMig(fips){
-  var data = $.ajax({
-    url: "https://gis.dola.colorado.gov/lookups/components?vars=netmigration&year=1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021&county="+fips,
-    dataType: 'json',
-    async: false,
-  });
-
-  return data.responseJSON;
-}
-
-function getDataRegionMig(fips){
-  var data = $.ajax({
-    url: "https://gis.dola.colorado.gov/lookups/components_region?vars=netmigration&year=1985,1986,1987,1988,1989,1990,1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021&reg_num="+fips,
-    dataType: 'json',
-    async: false,
-  });
-
-  return data.responseJSON;
-}
-
-
-
-function commafy(nStr) {
-    var x, x1, x2, rgx;
-    nStr += '';
-    x = nStr.split('.');
-    x1 = x[0];
-    x2 = x.length > 1 ? '.' + x[1] : '';
-    rgx = /(\d+)(\d{3})/;
-    while (rgx.test(x1)) {
-        x1 = x1.replace(rgx, '$1' + ',' + '$2');
-    }
-    return x1 + x2;
-}
-
-function alphanum(a, b) {
-  function chunkify(t) {
-    var tz = [], x = 0, y = -1, n = 0, i, j;
-
-    while (i = (j = t.charAt(x++)).charCodeAt(0)) {
-      var m = (i == 46 || (i >=48 && i <= 57));
-      if (m !== n) {
-        tz[++y] = "";
-        n = m;
-      }
-      tz[y] += j;
-    }
-    return tz;
-  }
-
-  var aa = chunkify(a);
-  var bb = chunkify(b);
-
-  for (x = 0; aa[x] && bb[x]; x++) {
-    if (aa[x] !== bb[x]) {
-      var c = Number(aa[x]), d = Number(bb[x]);
-      if (c == aa[x] && d == bb[x]) {
-        return c - d;
-      } else return (aa[x] > bb[x]) ? 1 : -1;
-    }
-  }
-  return aa.length - bb.length;
-}
-
-function formatAsPercentage(num, decimal) {
-  return new Intl.NumberFormat('default', {
-    style: 'percent',
-    minimumFractionDigits: decimal,
-    maximumFractionDigits: decimal,
-  }).format(num / 100);
-}
-
-function getSelectValues(select) {
-  var result = [];
-  var options = select && select.options;
-  var opt;
-
-  for (var i=0, iLen=options.length; i<iLen; i++) {
-    opt = options[i];
-
-    if (opt.selected) {
-      result.push(opt.value || opt.text);
-    }
-  }
-  return result;
-}
-
-function getRandomColor() {
-  var letters = '0123456789ABCDEF';
-  var color = '#';
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-}
-
-const colorList = ['#a50026','#313695','#f46d43','#74add1','#fee090','#f1b6da','#6a3d9a','#ff7f00','#b2df8a','#cab2d6'];
+        /*wait for d3 to catch up to the rest of the program*/
+    setTimeout(function(){
+      listnames();
+    }, 500);
